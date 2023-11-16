@@ -3,21 +3,16 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
 export default (req: Request, res: Response, next: NextFunction) => {
+  console.log('verifyToken middleware')
   try {
-    const authHeader = req.headers.authorization
-    if (authHeader) {
-      /*
-      const decoded = jwt.verify(authHeader, req.app.locals.JWT_SECRET, (err) => {
-        if (err) return res.status(403).json({ success: false, message: 'Unauthenticated' })
-      })
-      */
-      const decoded = jwt.verify(authHeader, req.app.locals.JWT_SECRET)
-      const userID = decoded?.id || '';
-      res.locals.userID = userID;
-      return next()
+    const { access_token = '' } = req.cookies;
+    if (!access_token) {
+      return res.status(403).json({ success: false, message: 'Unauthenticated' })
     }
 
-    return res.status(403).json({ success: false, message: 'Unauthenticated' })
+    const userID = JSON.parse(access_token)?.id || ''
+    res.locals.userID = userID
+    return next()
   } catch (e) {
     return res.status(403).json({ success: false, message: 'Unauthenticated' })
   }

@@ -8,9 +8,8 @@ router.get("/mine", verifyToken, async (req: Request, res: Response) => {
   try {
     const { userID = '' } = res.locals;
     if (!userID) return res.status(400).json({ success: false, message: 'Unauthenticated.' })
-
     const songs = await SongModel.find({ userID })
-    return res.json({ songs })
+    return res.json({ success: true, items: songs })
   } catch (e) {
     console.log(e)
     return res.status(500).json({ success: false, message: 'An unexpected error occurred.' })

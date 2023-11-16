@@ -75,10 +75,10 @@ const Login = () => {
     try {
       const resp = await axios.post('http://localhost:3001/user/login', {
         username, password
-      })
+      }, { withCredentials: true })
 
-      if (resp.data.token) setCookies("access_token", resp.data.token)
-      localStorage.setItem("userID", resp?.data?.userID || '')
+      // if (resp.data.token) setCookies("access_token", resp.data.token, { httpOnly: true })
+      // localStorage.setItem("userID", resp?.data?.userID || '')
       navigate("/songs")
     } catch (e: any) {
       if (e?.response?.data?.success === false) {
