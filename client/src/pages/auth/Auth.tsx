@@ -3,12 +3,18 @@ import { useCookies } from 'react-cookie'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Auth = () => {
+interface Props {
+  authenticated: boolean;
+  setAuthenticated: (authenticated: boolean) => void;
+}
+
+
+const Auth: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   return (
     <div>
       <Register />
 
-      <Login />
+      <Login authenticated={authenticated} setAuthenticated={setAuthenticated} />
     </div>
   )
 }
@@ -62,11 +68,10 @@ const Register = () => {
   )
 }
 
-const Login = () => {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
+  const [username, setUsername] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
   const [message, setMessage] = useState({ message: '', success: false })
-  const [_, setCookies] = useCookies(["access_token"])
 
   const navigate = useNavigate()
 
@@ -77,9 +82,8 @@ const Login = () => {
         username, password
       }, { withCredentials: true })
 
-      // if (resp.data.token) setCookies("access_token", resp.data.token, { httpOnly: true })
-      // localStorage.setItem("userID", resp?.data?.userID || '')
-      navigate("/songs")
+      if (resp?.status !== 200) setMessage({ message: 'Failed to sign in.', success: false })
+      else { setAuthenticated(true); navigate("/songs") }
     } catch (e: any) {
       if (e?.response?.data?.success === false) {
         setMessage({ success: false, message: e?.response?.data?.message })
