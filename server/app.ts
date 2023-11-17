@@ -16,12 +16,13 @@ const app: Express = express();
 const version: string = '0.0.1';
 
 app.locals.JWT_SECRET = process.env?.JWT_SECRET || ''
+app.locals.PROD = process.env?.NODE_ENV === 'prod'
 
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 

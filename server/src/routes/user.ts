@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import { UserModel, IUser } from "../models/user";
 import session from 'express-session';
 import dayjs from 'dayjs'
+import app from "../../app";
 
 dotenv.config()
 
@@ -42,16 +43,14 @@ router.post("/login", async (req: Request, res: Response) => {
     const sessionData = {
       id: user._id,
     }
+    const token = jwt.sign(sessionData, req.app.locals?.JWT_SECRET || '')
 
-    res.cookie("access_token", JSON.stringify(sessionData), {
-      secure: false,
+    res.cookie("access_token", token, {
+      secure: app.locals?.PROD || false,
       httpOnly: true,
       expires: dayjs().add(30, "days").toDate(),
     })
 
-    // res.header('Access-Control-Allow-Origin', 'localhost');
-
-    // const token = jwt.sign({ id: user._id }, req.app.locals?.JWT_SECRET || '')
     res.json({ success: true })
 
     return res.send()

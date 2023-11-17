@@ -10,7 +10,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
       return res.status(403).json({ success: false, message: 'Unauthenticated' })
     }
 
-    const userID = JSON.parse(access_token)?.id || ''
+    const decodedToken = jwt.verify(access_token, req.app.locals?.JWT_SECRET)
+
+    const userID = decodedToken?.id || ''
     res.locals.userID = userID
     return next()
   } catch (e) {
