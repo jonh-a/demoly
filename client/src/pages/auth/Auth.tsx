@@ -1,7 +1,15 @@
 import { useState, SyntheticEvent } from 'react'
-import { useCookies } from 'react-cookie'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Button from '@mui/material/Button'
+
 
 interface Props {
   authenticated: boolean;
@@ -12,8 +20,6 @@ interface Props {
 const Auth: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   return (
     <div>
-      <Register />
-
       <Login authenticated={authenticated} setAuthenticated={setAuthenticated} />
     </div>
   )
@@ -50,18 +56,22 @@ const Register = () => {
           )
         }
 
-        <div>
-          <label htmlFor='username'>Username: </label>
-          <input type="text" id="username" onChange={(e) => setUsername(e.target.value)} />
-        </div>
+        <Box>
+          <FormControl variant="standard">
+            <InputLabel htmlFor='username'>Username: </InputLabel>
+            <Input type="text" id="username" onChange={(e) => setUsername(e.target.value)} />
+          </FormControl>
+        </Box>
+
+        <Box>
+          <FormControl variant="standard">
+            <label htmlFor='password'>Password: </label>
+            <input type="text" id="password" onChange={(e) => setPassword(e.target.value)} />
+          </FormControl>
+        </Box>
 
         <div>
-          <label htmlFor='password'>Password: </label>
-          <input type="text" id="password" onChange={(e) => setPassword(e.target.value)} />
-        </div>
-
-        <div>
-          <button type="submit">Register</button>
+          <Button type="submit">Register</Button>
         </div>
       </form>
     </div>
@@ -92,7 +102,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   }
 
   return (
-    <div>
+    <Box sx={{ '& > :not(style)': { m: 1 } }}>
       <form onSubmit={handleSubmit}>
         <h2>Login</h2>
 
@@ -102,21 +112,26 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
           )
         }
 
-        <div>
-          <label htmlFor='username'>Username: </label>
-          <input type="text" id="username" onChange={(e) => setUsername(e.target.value)} />
-        </div>
+        <Box>
+          <FormControl variant="standard">
+            <InputLabel htmlFor='username'>Username: </InputLabel>
+            <Input type="text" id="username" onChange={(e) => setUsername(e.target.value)} />
+          </FormControl>
+        </Box>
 
-        <div>
-          <label htmlFor='password'>Password: </label>
-          <input type="text" id="password" onChange={(e) => setPassword(e.target.value)} />
-        </div>
+        <Box>
+          <FormControl variant="standard">
+            <InputLabel htmlFor='password'>Password: </InputLabel>
+            <Input type="text" id="password" onChange={(e) => setPassword(e.target.value)} />
+          </FormControl>
+        </Box>
 
-        <div>
-          <button type="submit">Login</button>
-        </div>
+
+        <Box>
+          <Button type="submit">Login</Button>
+        </Box>
       </form>
-    </div>
+    </Box>
   )
 }
 
