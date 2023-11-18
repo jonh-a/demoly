@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios';
 import Navbar from "./components/Navbar"
 import Auth from "./pages/auth/Auth"
 import Songs from "./pages/songs/Songs"
@@ -11,13 +12,28 @@ import Container from '@mui/material/Container';
 
 const App = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false)
+
+  const checkIfAuthenticated = async () => {
+    try {
+      const resp = await axios.get('http://localhost:3001/user/authenticated', { withCredentials: true })
+      if (resp.status === 200) setAuthenticated(true)
+      else setAuthenticated(false)
+    } catch (e: any) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    checkIfAuthenticated()
+  }, [])
+
   return (
     <Router>
       <Navbar authenticated={authenticated} />
       <Routes>
         <Route path="/" />
         <Route path="/auth" element={<Auth authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
-        <Route path="/logout" element={<Logout />} />
+        <Route path="/logout" element={<Logout setAuthenticated={setAuthenticated} />} />
         <Route path="/songs" element={<Songs />} />
         <Route path="/new" element={<NewSong authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
         <Route path="/song">

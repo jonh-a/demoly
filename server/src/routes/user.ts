@@ -6,6 +6,7 @@ import { UserModel, IUser } from "../models/user";
 import session from 'express-session';
 import dayjs from 'dayjs'
 import app from "../../app";
+import verifyToken from '../middleware/verifyToken'
 
 dotenv.config()
 
@@ -59,5 +60,29 @@ router.post("/login", async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, message: 'An unexpected error occurred.' })
   }
 })
+
+router.get('/logout', verifyToken, (req: Request, res: Response) => {
+  try {
+    res.cookie('access_token', 'none', {
+      expires: new Date(Date.now() + 1 * 1000),
+      httpOnly: true
+    })
+
+    return res.json({ success: true })
+  } catch (e: any) {
+    console.log(e)
+    return res.status(500).json({ success: false, message: 'An unexpected error occurred.' })
+  }
+})
+
+router.get('/authenticated', verifyToken, (req: Request, res: Response) => {
+  try {
+    return res.json({ success: true })
+  } catch (e: any) {
+    return res.status(400).json({ success: false })
+  }
+})
+
+
 
 export { router as userRouter }

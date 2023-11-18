@@ -48,7 +48,7 @@ const Song: React.FC<Props> = (
 
   const updateSong = async () => {
     try {
-      const resp = await axios.post(
+      const resp = await axios.put(
         url,
         { name, notes, content },
         { withCredentials: true }
@@ -58,16 +58,26 @@ const Song: React.FC<Props> = (
       if (resp?.data?.items?.name) setName(resp?.data?.items?.name || '')
       if (resp?.data?.items?.notes) setNotes(resp?.data?.items?.notes || '')
       if (resp?.data?.items?.content) setContent(resp?.data?.items?.content || '')
+      return true;
     } catch (err) {
       setError("An unexpected error occurred.")
+      return false;
     }
   }
 
   useEffect(() => { fetchSong() }, [])
 
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault()
+    const updated = await updateSong()
+    if (updated) await fetchSong()
+    if (!updated) setError('Failed to update.')
+  }
+
   console.log(song)
   return (
     <div>
+      {error && (<p>{error}</p>)}
       <form>
         <label htmlFor='name'>Name</label>
         <input type='text' id='name' onChange={(e) => setName(e.target.value)} value={name} />
@@ -77,6 +87,8 @@ const Song: React.FC<Props> = (
 
         <label htmlFor='content'>Lyrics</label>
         <input type='textarea' id='content' onChange={(e) => setContent(e.target.value)} value={content} />
+
+        <button type='submit' onClick={handleSubmit}>Save</button>
       </form>
     </div>
   )
