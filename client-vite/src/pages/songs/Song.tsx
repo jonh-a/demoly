@@ -1,20 +1,11 @@
 import { useState, useEffect, SyntheticEvent } from 'react'
-import axios from 'axios';
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import ServerClient from '../../apis/server'
 
 interface Props {
   authenticated: boolean
   setAuthenticated: (authenticated: boolean) => void;
-}
-
-interface SongData {
-  _id: string
-  name: string
-  userID: string
-  notes?: string
-  content?: string
-  createdAt?: string
-  updatedAt?: string
 }
 
 const Song: React.FC<Props> = (
@@ -23,6 +14,11 @@ const Song: React.FC<Props> = (
     setAuthenticated
   }
 ) => {
+  const navigate = useNavigate()
+
+  if (!authenticated) navigate('/auth')
+  console.log({ setAuthenticated })
+
   const { id = '' } = useParams()
   const [error, setError] = useState('')
 
@@ -30,11 +26,11 @@ const Song: React.FC<Props> = (
   const [notes, setNotes] = useState<string>('')
   const [content, setContent] = useState<string>('')
 
-  const url = `http://localhost:3001/song/${id}`
+  const url = `/song/${id}`
 
   const fetchSong = async () => {
     try {
-      const resp = await axios.get(url, { withCredentials: true })
+      const resp = await ServerClient.get(url, { withCredentials: true })
 
       if (!resp.data?.success) setError(resp?.data?.message)
       if (resp?.data?.items?.name) setName(resp?.data?.items?.name || '')
@@ -47,7 +43,7 @@ const Song: React.FC<Props> = (
 
   const updateSong = async () => {
     try {
-      const resp = await axios.put(
+      const resp = await ServerClient.put(
         url,
         { name, notes, content },
         { withCredentials: true }
