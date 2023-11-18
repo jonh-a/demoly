@@ -36,10 +36,10 @@ router.post("/login", async (req: Request, res: Response) => {
     const { username = '', password = '' } = req?.body;
     const user: IUser = await UserModel.findOne({ username })
 
-    if (!user) return res.status(400).json({ success: false, message: 'Failed to authenticate.' })
+    if (!user) return res.status(403).json({ success: false, message: 'Failed to authenticate.' })
 
     const passwordIsValid = await bcrypt.compare(password, user.password)
-    if (!passwordIsValid) return res.status(400).json({ success: false, message: 'Failed to authenticate.' })
+    if (!passwordIsValid) return res.status(403).json({ success: false, message: 'Failed to authenticate.' })
 
     const sessionData = {
       id: user._id,
@@ -79,7 +79,7 @@ router.get('/authenticated', verifyToken, (req: Request, res: Response) => {
   try {
     return res.json({ success: true })
   } catch (e: any) {
-    return res.status(400).json({ success: false })
+    return res.status(403).json({ success: false })
   }
 })
 

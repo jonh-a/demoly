@@ -1,12 +1,13 @@
 import { useState, SyntheticEvent } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import TextField from '../../components/TextField'
+import Button from '../../components/Button'
 
 interface Props {
   authenticated: boolean;
   setAuthenticated: (authenticated: boolean) => void;
 }
-
 
 const Auth: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   return (
@@ -40,7 +41,9 @@ const Register = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h2>Register</h2>
+        <article className="format lg:format-lg">
+          <h3>Register</h3>
+        </article>
 
         {
           message?.message && (
@@ -48,19 +51,30 @@ const Register = () => {
           )
         }
 
-        <div>
-          <label htmlFor='username'>Username: </label>
-          <input type="text" id="username" onChange={(e) => setUsername(e.target.value)} />
-        </div>
+        <TextField
+          id='username'
+          label='Username'
+          type='text'
+          setValue={setUsername}
+          placeholder='himynameis'
+          required={true}
+          value={username}
+        />
 
-        <div>
-          <label htmlFor='password'>Password: </label>
-          <input type="text" id="password" onChange={(e) => setPassword(e.target.value)} />
-        </div>
+        <TextField
+          id='password]'
+          label='Password'
+          type='password'
+          setValue={setPassword}
+          placeholder=''
+          required={true}
+          value={password}
+        />
 
-        <div>
-          <button type="submit">Register</button>
-        </div>
+        <Button
+          type="submit"
+          text="Register"
+        />
       </form>
     </div>
   )
@@ -94,7 +108,9 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h2>Login</h2>
+        <article className="format lg:format-lg">
+          <h3>Login</h3>
+        </article>
 
         {
           message?.message && (
@@ -102,20 +118,30 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
           )
         }
 
-        <div>
-          <label htmlFor='username'>Username: </label>
-          <input type="text" id="username" onChange={(e) => setUsername(e.target.value)} />
-        </div>
+        <TextField
+          id='username'
+          label='Username'
+          type='text'
+          setValue={setUsername}
+          placeholder='himynameis'
+          required={true}
+          value={username}
+        />
 
-        <div>
-          <label htmlFor='password'>Password: </label>
-          <input type="text" id="password" onChange={(e) => setPassword(e.target.value)} />
-        </div>
+        <TextField
+          id='password]'
+          label='Password'
+          type='password'
+          setValue={setPassword}
+          placeholder=''
+          required={true}
+          value={password}
+        />
 
-
-        <div>
-          <button type="submit">Login</button>
-        </div>
+        <Button
+          type="submit"
+          text="Register"
+        />
       </form>
     </div>
   )

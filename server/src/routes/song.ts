@@ -8,7 +8,7 @@ router.get("/mine", verifyToken, async (req: Request, res: Response) => {
   console.log(res.locals)
   try {
     const { userID = '' } = res.locals;
-    if (!userID) return res.status(400).json({ success: false, message: 'Unauthenticated.' })
+    if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })
     const songs = await SongModel.find({ userID })
     return res.json({ success: true, items: songs })
   } catch (e) {
@@ -21,14 +21,14 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
   console.log(res.locals)
   try {
     const { userID = '' } = res.locals;
-    if (!userID) return res.status(400).json({ success: false, message: 'Unauthenticated.' })
+    if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })
 
     const { id = '' } = req.params;
     const song = await SongModel.findById(id)
     console.log(id, song)
 
     if (song?.userID === userID) return res.json({ success: true, items: song })
-    else return res.status(400).json({ success: false, message: 'Unauthenticated.' })
+    else return res.status(403).json({ success: false, message: 'Unauthenticated.' })
 
   } catch (e) {
     console.log(e)
@@ -40,7 +40,7 @@ router.put("/:id", verifyToken, async (req: Request, res: Response) => {
   console.log(res.locals)
   try {
     const { userID = '' } = res.locals;
-    if (!userID) return res.status(400).json({ success: false, message: 'Unauthenticated.' })
+    if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })
 
     const { id = '' } = req.params;
     const { content = '', notes = '', name = '' } = req.body;
@@ -58,9 +58,7 @@ router.post("/new", verifyToken, async (req: Request, res: Response) => {
   try {
     const { userID = '' } = res.locals;
     const { name = '' } = req.body;
-    if (!userID) {
-      return res.status(400).json({ success: false, message: 'Unauthenticated.' });
-    }
+    if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' });
 
     const newSong = new SongModel({
       userID,

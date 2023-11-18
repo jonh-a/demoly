@@ -2,6 +2,9 @@ import { useState, useEffect, SyntheticEvent } from 'react'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import ServerClient from '../../apis/server'
+import TextField from '../../components/TextField'
+import TextArea from '../../components/TextArea'
+import Button from '../../components/Button'
 
 interface Props {
   authenticated: boolean
@@ -73,16 +76,40 @@ const Song: React.FC<Props> = (
     <div>
       {error && (<p>{error}</p>)}
       <form>
-        <label htmlFor='name'>Name</label>
-        <input type='text' id='name' onChange={(e) => setName(e.target.value)} value={name} />
+        <TextField
+          id='name'
+          label='Name'
+          type='text'
+          setValue={setName}
+          placeholder='...'
+          required={true}
+          value={name}
+        />
 
-        <label htmlFor='notes'>Notes</label>
-        <input type='text' id='notes' onChange={(e) => setNotes(e.target.value)} value={notes} />
+        <TextArea
+          id='notes'
+          label='Notes'
+          setValue={setNotes}
+          placeholder=''
+          required={false}
+          value={notes}
+          rows={5}
+        />
 
-        <label htmlFor='content'>Lyrics</label>
-        <input type='textarea' id='content' onChange={(e) => setContent(e.target.value)} value={content} />
+        <TextArea
+          id='content'
+          label='Content'
+          setValue={setContent}
+          placeholder=''
+          required={false}
+          value={content}
+          rows={50}
+        />
 
-        <button type='submit' onClick={handleSubmit}>Save</button>
+        <Button
+          type="submit"
+          text="Save"
+        />
       </form>
     </div>
   )

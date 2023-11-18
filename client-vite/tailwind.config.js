@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 import flowbite from 'flowbite/plugin'
+import flowbiteTypography from 'flowbite-typography'
 
 export default {
   content: [
@@ -12,7 +13,8 @@ export default {
     extend: {},
   },
   plugins: [
-    flowbite
+    flowbite,
+    flowbiteTypography,
   ],
 }
 

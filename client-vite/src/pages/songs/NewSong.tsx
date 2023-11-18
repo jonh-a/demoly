@@ -26,7 +26,7 @@ const NewSong: React.FC<Props> = (
         name
       }, { withCredentials: true })
 
-      if (resp?.status === 400) setAuthenticated(false); navigate('/')
+      if (resp?.status === 403) setAuthenticated(false); navigate('/')
       if (resp?.status !== 200) setMessage({ message: 'Failed to create song.', success: false })
       else if (resp?.data?.id) { navigate(`/song/${resp?.data?.id}`) }
     } catch (e: any) {
