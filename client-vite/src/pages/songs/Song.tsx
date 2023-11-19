@@ -75,7 +75,7 @@ const Song: React.FC<Props> = (
   return (
     <div>
       {error && (<p>{error}</p>)}
-      <form>
+      <form onSubmit={handleSubmit}>
         <TextField
           id='name'
           label='Name'
@@ -103,7 +103,7 @@ const Song: React.FC<Props> = (
           placeholder=''
           required={false}
           value={content}
-          rows={50}
+          rows={content.split("\n").length || 20}
         />
 
         <Button

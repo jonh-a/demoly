@@ -1,6 +1,8 @@
 import { useState, SyntheticEvent } from 'react'
 import { useNavigate } from 'react-router-dom';
 import ServerClient from '../../apis/server'
+import TextField from '../../components/TextField'
+import Button from '../../components/Button'
 
 interface Props {
   authenticated: boolean
@@ -39,16 +41,20 @@ const NewSong: React.FC<Props> = (
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h2>Login</h2>
+        <TextField
+          id='name'
+          label='Give it a name!'
+          type='text'
+          setValue={setName}
+          placeholder='My Super Creative Song Title'
+          required={true}
+          value={name}
+        />
 
-        <div>
-          <label htmlFor='username'>Give it a name! </label>
-          <input type="text" id="username" onChange={(e) => setName(e.target.value)} />
-        </div>
-
-        <div>
-          <button type="submit">Create</button>
-        </div>
+        <Button
+          type="submit"
+          text="Save"
+        />
       </form>
     </div>
   )
