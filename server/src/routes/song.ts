@@ -50,6 +50,22 @@ router.put("/:id", verifyToken, async (req: Request, res: Response) => {
   }
 })
 
+router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
+  try {
+    const { userID = '' } = res.locals;
+    if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })
+
+    const { id = '' } = req.params;
+    const song = await SongModel.findByIdAndDelete(id)
+    await song.save()
+
+    return res.json({ success: true })
+  } catch (e) {
+    console.log(e)
+    return res.status(500).json({ success: false, message: 'An unexpected error occurred.' })
+  }
+})
+
 router.post("/new", verifyToken, async (req: Request, res: Response) => {
   try {
     const { userID = '' } = res.locals;
