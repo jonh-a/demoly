@@ -141,7 +141,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
 
         <Button
           type="submit"
-          text="Register"
+          text="Login"
         />
       </form>
     </div>

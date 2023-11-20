@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = import.meta.env.MODE === 'development' ? '/api' : 'https://serverurl.com'
+const baseURL = import.meta.env.MODE === 'development' ? '/api' : 'https://api.demoly.usingthe.computer'
 
 const ServerClient = axios.create({
   baseURL,

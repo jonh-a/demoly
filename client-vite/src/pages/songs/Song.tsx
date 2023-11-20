@@ -21,8 +21,6 @@ const Song: React.FC<Props> = (
   const navigate = useNavigate()
 
   if (!authenticated) navigate('/auth')
-  console.log({ setAuthenticated })
-
   const { id = '' } = useParams()
   const [error, setError] = useState('')
 

@@ -17,14 +17,12 @@ router.get("/mine", verifyToken, async (req: Request, res: Response) => {
 })
 
 router.get("/:id", verifyToken, async (req: Request, res: Response) => {
-  console.log(res.locals)
   try {
     const { userID = '' } = res.locals;
     if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })
 
     const { id = '' } = req.params;
     const song = await SongModel.findById(id)
-    console.log(id, song)
 
     if (song?.userID === userID) return res.json({ success: true, items: song })
     else return res.status(403).json({ success: false, message: 'Unauthenticated.' })
@@ -36,7 +34,6 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
 })
 
 router.put("/:id", verifyToken, async (req: Request, res: Response) => {
-  console.log(res.locals)
   try {
     const { userID = '' } = res.locals;
     if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })
@@ -67,7 +64,7 @@ router.post("/new", verifyToken, async (req: Request, res: Response) => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     })
-    console.log(newSong)
+
     await newSong.save()
 
     return res.json({ success: true, id: newSong?._id || '' })

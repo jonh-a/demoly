@@ -1,11 +1,11 @@
 interface Props {
-  type: string;
+  type: 'button' | 'submit' | 'reset';
   maxWidth?: string;
   text: string;
 }
 
 const Button: React.FC<Props> = ({
-  type,
+  type = 'submit',
   maxWidth = 'md',
   text,
 }) => {
