@@ -7,6 +7,7 @@ import Songs from "./pages/songs/Songs"
 import Song from "./pages/songs/Song"
 import Logout from './pages/auth/Logout'
 import NewSong from "./pages/songs/NewSong"
+import Home from "./pages/home/Home"
 
 const App = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false)
@@ -29,7 +30,7 @@ const App = () => {
     <Router>
       <Navbar authenticated={authenticated} />
       <Routes>
-        <Route path="/" />
+        <Route path="/" element={<Home authenticated={authenticated} />}/>
         <Route path="/auth" element={<Auth authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
         <Route path="/logout" element={<Logout setAuthenticated={setAuthenticated} />} />
         <Route path="/songs" element={<Songs />} />
