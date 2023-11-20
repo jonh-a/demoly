@@ -1,9 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  console.log('verifyToken middleware')
   try {
     const { access_token = '' } = req.cookies;
     if (!access_token) {
@@ -18,5 +16,4 @@ export default (req: Request, res: Response, next: NextFunction) => {
   } catch (e) {
     return res.status(403).json({ success: false, message: 'Unauthenticated' })
   }
-
 }

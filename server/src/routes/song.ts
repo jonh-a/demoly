@@ -5,7 +5,6 @@ import verifyToken from '../middleware/verifyToken'
 const router = Router()
 
 router.get("/mine", verifyToken, async (req: Request, res: Response) => {
-  console.log(res.locals)
   try {
     const { userID = '' } = res.locals;
     if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })

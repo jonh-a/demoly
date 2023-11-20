@@ -10,7 +10,9 @@ export default {
     './node_modules/flowbite/**/*.js',
   ],
   theme: {
-    extend: {},
+    container: {
+      center: true,
+    },
   },
   plugins: [
     flowbite,

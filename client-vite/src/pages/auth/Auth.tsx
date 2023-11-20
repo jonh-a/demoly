@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
+import Container from '../../components/Container';
 
 interface Props {
   authenticated: boolean;
@@ -11,10 +12,10 @@ interface Props {
 
 const Auth: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   return (
-    <div>
+    <Container>
       <Login authenticated={authenticated} setAuthenticated={setAuthenticated} />
       <Register />
-    </div>
+    </Container>
   )
 }
 

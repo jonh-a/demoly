@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ServerClient from '../../apis/server'
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
+import Container from '../../components/Container';
 
 interface Props {
   authenticated: boolean
@@ -39,7 +40,7 @@ const NewSong: React.FC<Props> = (
   }
 
   return (
-    <div>
+    <Container>
       <form onSubmit={handleSubmit}>
         <TextField
           id='name'
@@ -56,7 +57,7 @@ const NewSong: React.FC<Props> = (
           text="Save"
         />
       </form>
-    </div>
+    </Container>
   )
 }
 

@@ -5,6 +5,7 @@ import ServerClient from '../../apis/server'
 import TextField from '../../components/TextField'
 import TextArea from '../../components/TextArea'
 import Button from '../../components/Button'
+import Container from '../../components/Container'
 
 interface Props {
   authenticated: boolean
@@ -73,7 +74,7 @@ const Song: React.FC<Props> = (
   }
 
   return (
-    <div>
+    <Container>
       {error && (<p>{error}</p>)}
       <form onSubmit={handleSubmit}>
         <TextField
@@ -111,7 +112,7 @@ const Song: React.FC<Props> = (
           text="Save"
         />
       </form>
-    </div>
+    </Container>
   )
 }
 
