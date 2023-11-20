@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import Container from '../../components/Container';
+import FormHeader from '../../components/FormHeader';
 
 interface Props {
   authenticated: boolean;
@@ -42,9 +43,9 @@ const Register = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <article className="format lg:format-lg">
-          <h3>Register</h3>
-        </article>
+        <FormHeader>
+          Register
+        </FormHeader>
 
         {
           message?.message && (
@@ -109,9 +110,9 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <article className="format lg:format-lg">
-          <h3>Login</h3>
-        </article>
+        <FormHeader>
+          Login
+        </FormHeader>
 
         {
           message?.message && (

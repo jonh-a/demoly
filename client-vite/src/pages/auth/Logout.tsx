@@ -20,6 +20,7 @@ const Logout: React.FC<Props> = ({ setAuthenticated }) => {
         setRemoved(true)
         setAuthenticated(false)
         navigate('/')
+        window.location.reload()
       }
     } catch (e) {
       console.log(e)

@@ -83,6 +83,7 @@ const Song: React.FC<Props> = (
           placeholder='...'
           required={true}
           value={name}
+          maxWidth='lg'
         />
 
         <TextArea
@@ -97,7 +98,7 @@ const Song: React.FC<Props> = (
 
         <TextArea
           id='content'
-          label='Content'
+          label='Lyrics'
           setValue={setContent}
           placeholder=''
           required={false}

@@ -4,6 +4,7 @@ import ServerClient from '../../apis/server'
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import Container from '../../components/Container';
+import FormHeader from '../../components/FormHeader';
 
 interface Props {
   authenticated: boolean
@@ -41,10 +42,15 @@ const NewSong: React.FC<Props> = (
 
   return (
     <Container>
+      <div>
       <form onSubmit={handleSubmit}>
+        <FormHeader>
+          Let's give it a name!
+        </FormHeader>
+        
         <TextField
           id='name'
-          label='Give it a name!'
+          label=''
           type='text'
           setValue={setName}
           placeholder='My Super Creative Song Title'
@@ -57,6 +63,7 @@ const NewSong: React.FC<Props> = (
           text="Save"
         />
       </form>
+      </div>
     </Container>
   )
 }

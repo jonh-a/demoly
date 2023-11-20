@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import ServerClient from '../../apis/server'
 import { Link } from 'react-router-dom'
 import Container from '../../components/Container'
+import timeAgoFromString from '../../util/timeAgo'
+import { TrashIcon } from '@heroicons/react/24/outline'
 
 interface Song {
   _id: string;
@@ -49,7 +51,12 @@ const Songs = () => {
                 </Link>
               </th>
               <td className="px-6 py-4">
-                {song?.updatedAt}
+                {song?.updatedAt && timeAgoFromString(song?.updatedAt)}
+              </td>
+              <td className="px-6 py-4">
+                <Link to={`/song/delete/${song?._id}`}>
+                  {<TrashIcon className='h-6 w-6' />}
+                </Link>
               </td>
             </tr>
           ))

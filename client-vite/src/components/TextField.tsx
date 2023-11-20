@@ -17,7 +17,7 @@ const TextField: React.FC<Props> = ({
   setValue,
   placeholder,
   required,
-  maxWidth = 'lg',
+  maxWidth = 'md',
 }) => {
   return (
     <div className="mb-6">
