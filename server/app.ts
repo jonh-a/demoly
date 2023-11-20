@@ -22,8 +22,12 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:5173/', 'http://localhost:3000', 'https://demoly.usingthe.computer'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://demoly.usingthe.computer',
+    'localhost'
+  ],
 }));
 
 mongoose.connect(MONGO_CONN)

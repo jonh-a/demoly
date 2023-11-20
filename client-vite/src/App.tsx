@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { useState, useEffect } from 'react'
-import axios from 'axios';
+import ServerClient from "./apis/server"
 import Navbar from "./components/Navbar"
 import Auth from "./pages/auth/Auth"
 import Songs from "./pages/songs/Songs"
@@ -13,7 +13,7 @@ const App = () => {
 
   const checkIfAuthenticated = async () => {
     try {
-      const resp = await axios.get('/api/user/authenticated', { withCredentials: true })
+      const resp = await ServerClient.get('/user/authenticated', { withCredentials: true })
       if (resp.status === 200) setAuthenticated(true)
       else setAuthenticated(false)
     } catch (e: any) {

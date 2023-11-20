@@ -1,5 +1,5 @@
 import { useState, SyntheticEvent } from 'react'
-import axios from 'axios';
+import ServerClient from '../../apis/server';
 import { useNavigate } from 'react-router-dom';
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
@@ -28,7 +28,7 @@ const Register = () => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     try {
-      const resp = await axios.post('/api/user/register', {
+      const resp = await ServerClient.post('/user/register', {
         username, password
       })
 
@@ -94,7 +94,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     try {
-      const resp = await axios.post('/api/user/login', {
+      const resp = await ServerClient.post('/user/login', {
         username, password
       }, { withCredentials: true })
 
