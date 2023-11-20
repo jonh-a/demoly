@@ -34,6 +34,7 @@ const Song: React.FC<Props> = (
     try {
       const resp = await ServerClient.get(url, { withCredentials: true })
 
+      if (resp.status === 403) setAuthenticated(false); navigate('/')
       if (!resp.data?.success) setError(resp?.data?.message)
       if (resp?.data?.items?.name) setName(resp?.data?.items?.name || '')
       if (resp?.data?.items?.notes) setNotes(resp?.data?.items?.notes || '')
