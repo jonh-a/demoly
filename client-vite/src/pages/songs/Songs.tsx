@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Container from '../../components/Container'
 import timeAgoFromString from '../../util/timeAgo'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import Modal from '../../components/Modal'
 
 interface Props {
   authenticated: boolean
@@ -17,7 +18,10 @@ interface Song {
 
 const Songs: React.FC<Props> = ({ authenticated }) => {
   const [songs, setSongs] = useState<Song[]>([])
-  const [error, setError] = useState('')
+  const [error, setError] = useState<string>('')
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null)
+  const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
   const url = '/song/mine'
   const navigate = useNavigate()
   if (!authenticated) navigate('/login')
@@ -33,7 +37,25 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
     }
   }
 
+  const deleteSong = async (id: string) => {
+    const deleteUrl = `/song/${id}`
+    try {
+      setLoadingDelete(true)
+      const resp = await ServerClient.delete(deleteUrl, { withCredentials: true })
+      setLoadingDelete(false)
 
+      if (resp.data?.success) {
+        setModalOpen(false)
+        setSelectedSong(null)
+        fetchSongs()
+      }
+      if (!resp.data?.success) setError(resp?.data?.message)
+      if (resp?.data?.items) setSongs(resp?.data?.items || [])
+    } catch (err) {
+      setLoadingDelete(false)
+      setError("An unexpected error occurred.")
+    }
+  }
 
   useEffect(() => {
     fetchSongs()
@@ -41,6 +63,15 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
 
   return (
     <Container maxWidth="2xl">
+      <Modal 
+        open={modalOpen} 
+        setOpen={setModalOpen}
+        header={`Delete ${selectedSong?.name}`}
+        text={`Are you sure you want to delete ${selectedSong?.name}?`}
+        confirmText='Delete'
+        onConfirm={() => deleteSong(selectedSong?._id || '')}
+        disabled={loadingDelete}
+      />
       {error && <p>{error}</p>}
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -64,8 +95,16 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
                   {song?.updatedAt && timeAgoFromString(song?.updatedAt)}
                 </td>
                 <td className="px-6 py-4 float-right">
-                  <Link to={`/song/delete/${song?._id}`}>
-                    {<TrashIcon className='h-6 w-6' />}
+                  <Link to={`#`}>
+                    {
+                      <TrashIcon 
+                        className='h-6 w-6' 
+                        onClick={() => {
+                          setSelectedSong(song)
+                          setModalOpen(true)
+                        }}
+                      />
+                    }
                   </Link>
                 </td>
               </tr>

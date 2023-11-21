@@ -57,9 +57,8 @@ router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
 
     const { id = '' } = req.params;
     const song = await SongModel.findOneAndDelete({ _id: id, userID })
-    await song.save()
-
-    return res.json({ success: true })
+    if (song) return res.json({ success: true })
+    return res.status(403).json({ sucess: false })
   } catch (e) {
     console.log(e)
     return res.status(500).json({ success: false, message: 'An unexpected error occurred.' })

@@ -100,7 +100,7 @@ const Song: React.FC<Props> = (
         buttonSet={(<ButtonSet>
           <CancelButton
             text="Cancel"
-            onClick={handleReset}
+            onClick={() => navigate('/songs')}
           />
           <Button
             text='Save'
