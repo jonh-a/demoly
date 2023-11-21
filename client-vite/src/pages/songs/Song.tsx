@@ -9,6 +9,7 @@ import Container from '../../components/Container'
 import Form from '../../components/Form'
 import ButtonSet from '../../components/ButtonSet'
 import CancelButton from '../../components/CancelButton'
+import Modal from '../../components/Modal'
 
 interface Props {
   authenticated: boolean
@@ -28,12 +29,14 @@ const Song: React.FC<Props> = (
   const [error, setError] = useState('')
 
   const [name, setName] = useState<string>('')
-  const [notes, setNotes] = useState<string>('')
-  const [content, setContent] = useState<string>('')
+  const [_, setNotes] = useState<string>('')
+  const [__, setContent] = useState<string>('')
 
   const [newName, setNewName] = useState<string>('')
   const [newNotes, setNewNotes] = useState<string>('')
   const [newContent, setNewContent] = useState<string>('')
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
 
   const url = `/song/${id}`
 
@@ -85,22 +88,25 @@ const Song: React.FC<Props> = (
     if (!updated) setError('Failed to update.')
   }
 
-  const handleReset = () => {
-    setNewName(name)
-    setNewNotes(notes)
-    setNewContent(content)
-  }
-
   return (
     <Container>
       {error && (<p>{error}</p>)}
+      <Modal 
+        open={modalOpen} 
+        setOpen={setModalOpen}
+        header={'Are you sure you want to leave?'}
+        text={`All unsaved changes will be lost.`}
+        confirmText='Leave'
+        onConfirm={() => navigate('/')}
+        disabled={false}
+      />
       <Form
         onSubmit={handleSubmit}
         header={`Editing ${name}`}
         buttonSet={(<ButtonSet>
           <CancelButton
             text="Cancel"
-            onClick={() => navigate('/songs')}
+            onClick={() => setModalOpen(true)}
           />
           <Button
             text='Save'
