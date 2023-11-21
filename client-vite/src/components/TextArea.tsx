@@ -17,7 +17,6 @@ const TextArea: React.FC<Props> = ({
   setValue,
   placeholder,
   required,
-  maxWidth = 'lg',
   rows = 40,
   subtitle = ''
 }) => {

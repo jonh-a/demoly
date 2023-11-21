@@ -1,5 +1,3 @@
-import { PropsWithChildren } from "react"
-
 const Container = (props: any) => {
   const { maxWidth = 'xl' } = props
   return (

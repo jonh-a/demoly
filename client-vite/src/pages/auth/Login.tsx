@@ -1,7 +1,6 @@
 import { useState, SyntheticEvent } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import TextField from "../../components/TextField"
-import FormHeader from "../../components/FormHeader"
 import Button from "../../components/Button"
 import ServerClient from "../../apis/server"
 import Container from "../../components/Container"

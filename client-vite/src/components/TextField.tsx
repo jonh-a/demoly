@@ -18,7 +18,6 @@ const TextField: React.FC<Props> = ({
   setValue,
   placeholder,
   required,
-  maxWidth = 'md',
   subtitle = ''
 }) => {
   return (
