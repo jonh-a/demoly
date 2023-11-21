@@ -20,7 +20,7 @@ const Song: React.FC<Props> = (
 ) => {
   const navigate = useNavigate()
 
-  if (!authenticated) navigate('/auth')
+  if (!authenticated) navigate('/login')
   const { id = '' } = useParams()
   const [error, setError] = useState('')
 

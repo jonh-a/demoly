@@ -13,7 +13,7 @@ const Home: React.FC<Props> = ({
 
   useEffect(() => {
     if (authenticated) navigate('/songs')
-    if (!authenticated) navigate('/auth')
+    if (!authenticated) navigate('/login')
   }, [])
 
   return (

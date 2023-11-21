@@ -47,7 +47,7 @@ const Navbar: React.FC<Props> = ({
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <Link to={authenticated ? "/songs" : '/auth'}>
+                  <Link to={authenticated ? "/songs" : '/login'}>
                     <article className="prose-h2 text-white">Demoly</article>
                   </Link>
                 </div>

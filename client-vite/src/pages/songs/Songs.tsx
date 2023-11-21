@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
 import ServerClient from '../../apis/server'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Container from '../../components/Container'
 import timeAgoFromString from '../../util/timeAgo'
 import { TrashIcon } from '@heroicons/react/24/outline'
+
+interface Props {
+  authenticated: boolean
+}
 
 interface Song {
   _id: string;
@@ -11,10 +15,11 @@ interface Song {
   updatedAt?: string;
 }
 
-const Songs = () => {
+const Songs: React.FC<Props> = ({ authenticated }) => {
   const [songs, setSongs] = useState<Song[]>([])
   const [error, setError] = useState('')
   const url = '/song/mine'
+  const navigate = useNavigate()
 
   const fetchSongs = async () => {
     try {
@@ -27,7 +32,10 @@ const Songs = () => {
     }
   }
 
-  useEffect(() => { fetchSongs() }, [])
+  useEffect(() => {
+    if (!authenticated) navigate('/login')
+    fetchSongs() 
+  }, [])
 
   return (
     <Container>
