@@ -31,7 +31,6 @@ const App = () => {
     <Router>
       <Navbar authenticated={authenticated} />
       <Routes>
-        <Route path="/" element={<Home authenticated={authenticated} />}/>
         <Route path="/login" element={<Login authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout setAuthenticated={setAuthenticated} />} />
@@ -40,6 +39,7 @@ const App = () => {
         <Route path="/song">
           <Route path=":id" element={<Song authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
         </Route>
+        <Route path="/" element={<Home authenticated={authenticated} />} />
       </Routes>
     </Router>
   )

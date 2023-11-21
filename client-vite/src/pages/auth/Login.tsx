@@ -7,8 +7,8 @@ import ServerClient from "../../apis/server"
 import Container from "../../components/Container"
 
 interface Props {
-    authenticated: boolean;
-    setAuthenticated: (authenticated: boolean) => void;
+  authenticated: boolean;
+  setAuthenticated: (authenticated: boolean) => void;
 }
 
 const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
@@ -37,7 +37,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   }
 
   return (
-    <Container>
+    <Container maxWidth='lg'>
       <form onSubmit={handleSubmit}>
         <FormHeader>
           Login

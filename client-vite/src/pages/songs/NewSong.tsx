@@ -43,26 +43,26 @@ const NewSong: React.FC<Props> = (
   return (
     <Container>
       <div>
-      <form onSubmit={handleSubmit}>
-        <FormHeader>
-          Let's give it a name!
-        </FormHeader>
-        
-        <TextField
-          id='name'
-          label=''
-          type='text'
-          setValue={setName}
-          placeholder='My Super Creative Song Title'
-          required={true}
-          value={name}
-        />
+        <form onSubmit={handleSubmit}>
+          <FormHeader>
+            Let's give it a name!
+          </FormHeader>
 
-        <Button
-          type="submit"
-          text="Save"
-        />
-      </form>
+          <TextField
+            id='name'
+            label=''
+            type='text'
+            setValue={setName}
+            placeholder='My Super Creative Song Title'
+            required={true}
+            value={name}
+          />
+
+          <Button
+            type="submit"
+            text="Save"
+          />
+        </form>
       </div>
     </Container>
   )

@@ -22,9 +22,9 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
     if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })
 
     const { id = '' } = req.params;
-    const song = await SongModel.findById(id)
+    const song = await SongModel.findOne({ _id: id, userID })
 
-    if (song?.userID === userID) return res.json({ success: true, items: song })
+    if (song) return res.json({ success: true, items: song })
     else return res.status(403).json({ success: false, message: 'Unauthenticated.' })
 
   } catch (e) {
@@ -40,7 +40,7 @@ router.put("/:id", verifyToken, async (req: Request, res: Response) => {
 
     const { id = '' } = req.params;
     const { content = '', notes = '', name = '' } = req.body;
-    const song = await SongModel.findByIdAndUpdate(id, { content, notes, name, updatedAt: new Date().toISOString() })
+    const song = await SongModel.findOneAndUpdate({ _id: id, userID }, { content, notes, name, updatedAt: new Date().toISOString() })
     await song.save()
 
     return res.json({ success: true, items: song })
@@ -56,7 +56,7 @@ router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
     if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' })
 
     const { id = '' } = req.params;
-    const song = await SongModel.findByIdAndDelete(id)
+    const song = await SongModel.findOneAndDelete({ _id: id, userID })
     await song.save()
 
     return res.json({ success: true })

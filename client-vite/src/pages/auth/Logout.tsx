@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import axios from 'axios';
+import ServerClient from '../../apis/server'
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -15,7 +15,7 @@ const Logout: React.FC<Props> = ({ setAuthenticated }) => {
 
   const sendLogout = async () => {
     try {
-      const resp = await axios.get('/api/user/logout', { withCredentials: true })
+      const resp = await ServerClient.get('/user/logout', { withCredentials: true })
       if (resp.status === 200) {
         setRemoved(true)
         setAuthenticated(false)

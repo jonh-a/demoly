@@ -25,7 +25,7 @@ const Register = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth='lg'>
       <form onSubmit={handleSubmit}>
         <FormHeader>
           Register
