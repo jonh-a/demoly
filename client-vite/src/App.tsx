@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { useState, useEffect } from 'react'
 import ServerClient from "./apis/server"
 import Navbar from "./components/Navbar"
-import Auth from "./pages/auth/Auth"
 import Songs from "./pages/songs/Songs"
 import Song from "./pages/songs/Song"
 import Logout from './pages/auth/Logout'
@@ -36,7 +35,7 @@ const App = () => {
         <Route path="/login" element={<Login authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout setAuthenticated={setAuthenticated} />} />
-        <Route path="/songs" element={<Songs />} />
+        <Route path="/songs" element={<Songs authenticated={authenticated} />} />
         <Route path="/new" element={<NewSong authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
         <Route path="/song">
           <Route path=":id" element={<Song authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
