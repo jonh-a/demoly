@@ -2,6 +2,7 @@
 
 import flowbite from 'flowbite/plugin'
 import flowbiteTypography from 'flowbite-typography'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default {
   content: [
@@ -10,6 +11,9 @@ export default {
     './node_modules/flowbite/**/*.js',
   ],
   theme: {
+    fontFamily: {
+      sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+    },
     container: {
       center: true,
     },

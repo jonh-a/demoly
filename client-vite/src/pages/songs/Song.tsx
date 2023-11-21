@@ -6,6 +6,9 @@ import TextField from '../../components/TextField'
 import TextArea from '../../components/TextArea'
 import Button from '../../components/Button'
 import Container from '../../components/Container'
+import Form from '../../components/Form'
+import ButtonSet from '../../components/ButtonSet'
+import CancelButton from '../../components/CancelButton'
 
 interface Props {
   authenticated: boolean
@@ -28,6 +31,10 @@ const Song: React.FC<Props> = (
   const [notes, setNotes] = useState<string>('')
   const [content, setContent] = useState<string>('')
 
+  const [newName, setNewName] = useState<string>('')
+  const [newNotes, setNewNotes] = useState<string>('')
+  const [newContent, setNewContent] = useState<string>('')
+
   const url = `/song/${id}`
 
   const fetchSong = async () => {
@@ -36,9 +43,18 @@ const Song: React.FC<Props> = (
 
       if (resp.status === 403) { setAuthenticated(false); navigate('/') }
       if (!resp.data?.success) setError(resp?.data?.message)
-      if (resp?.data?.items?.name) setName(resp?.data?.items?.name || '')
-      if (resp?.data?.items?.notes) setNotes(resp?.data?.items?.notes || '')
-      if (resp?.data?.items?.content) setContent(resp?.data?.items?.content || '')
+      if (resp?.data?.items?.name) {
+        setName(resp?.data?.items?.name || '')
+        setNewName(resp?.data?.items?.name || '')
+      }
+      if (resp?.data?.items?.notes) {
+        setNotes(resp?.data?.items?.notes || '')
+        setNewNotes(resp?.data?.items?.notes || '')
+      }
+      if (resp?.data?.items?.content) {
+        setContent(resp?.data?.items?.content || '')
+        setNewContent(resp?.data?.items?.content || '')
+      }
     } catch (err) {
       setError("An unexpected error occurred.")
     }
@@ -48,14 +64,11 @@ const Song: React.FC<Props> = (
     try {
       const resp = await ServerClient.put(
         url,
-        { name, notes, content },
+        { name: newName, notes: newNotes, content: newContent },
         { withCredentials: true }
       )
 
-      if (!resp.data?.success) setError(resp?.data?.message)
-      if (resp?.data?.items?.name) setName(resp?.data?.items?.name || '')
-      if (resp?.data?.items?.notes) setNotes(resp?.data?.items?.notes || '')
-      if (resp?.data?.items?.content) setContent(resp?.data?.items?.content || '')
+      if (!resp.data?.success) { setError(resp?.data?.message); return false }
       return true;
     } catch (err) {
       setError("An unexpected error occurred.")
@@ -72,46 +85,61 @@ const Song: React.FC<Props> = (
     if (!updated) setError('Failed to update.')
   }
 
+  const handleReset = () => {
+    setNewName(name)
+    setNewNotes(notes)
+    setNewContent(content)
+  }
+
   return (
     <Container>
       {error && (<p>{error}</p>)}
-      <form onSubmit={handleSubmit}>
+      <Form
+        onSubmit={handleSubmit}
+        header={`Editing ${name}`}
+        buttonSet={(<ButtonSet>
+          <CancelButton
+            text="Cancel"
+            onClick={handleReset}
+          />
+          <Button
+            text='Save'
+            type='submit'
+          />
+        </ButtonSet>)}
+
+      >
         <TextField
           id='name'
           label='Name'
           type='text'
-          setValue={setName}
+          setValue={setNewName}
           placeholder='...'
           required={true}
-          value={name}
+          value={newName}
           maxWidth='lg'
         />
 
         <TextArea
           id='notes'
           label='Notes'
-          setValue={setNotes}
+          setValue={setNewNotes}
           placeholder=''
           required={false}
-          value={notes}
+          value={newNotes}
           rows={5}
         />
 
         <TextArea
           id='content'
           label='Lyrics'
-          setValue={setContent}
+          setValue={setNewContent}
           placeholder=''
           required={false}
-          value={content}
-          rows={content.split("\n").length || 20}
+          value={newContent}
+          rows={newContent.split("\n").length || 20}
         />
-
-        <Button
-          type="submit"
-          text="Save"
-        />
-      </form>
+      </Form>
     </Container>
   )
 }

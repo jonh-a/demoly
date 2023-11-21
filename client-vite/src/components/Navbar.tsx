@@ -5,8 +5,8 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 const navigation = [
   { name: 'Songs', href: '/songs', current: false, auth: true },
   { name: 'New Song', href: '/new', current: false, auth: true },
-  { name: 'Settings', href: '/settings', current: false, auth: true},
-  { name: 'Logout', href: '/logout', current: false, auth: true}
+  { name: 'Settings', href: '/settings', current: false, auth: true },
+  { name: 'Logout', href: '/logout', current: false, auth: true }
 ]
 
 const classNames = (...classes: any[]) => {
@@ -40,7 +40,7 @@ const Navbar: React.FC<Props> = ({
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-10xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {authenticated && <MobileMenuButton open={open} />}

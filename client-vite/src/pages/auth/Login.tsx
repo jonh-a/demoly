@@ -5,6 +5,9 @@ import FormHeader from "../../components/FormHeader"
 import Button from "../../components/Button"
 import ServerClient from "../../apis/server"
 import Container from "../../components/Container"
+import Form from '../../components/Form'
+import ButtonSet from '../../components/ButtonSet'
+import CancelButton from '../../components/CancelButton'
 
 interface Props {
   authenticated: boolean;
@@ -38,11 +41,22 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
 
   return (
     <Container maxWidth='lg'>
-      <form onSubmit={handleSubmit}>
-        <FormHeader>
-          Login
-        </FormHeader>
-
+      <Form
+        onSubmit={handleSubmit}
+        header='Login'
+        buttonSet={(
+          <ButtonSet>
+            <CancelButton
+              onClick={() => navigate('/register')}
+              text="don't have an account?"
+            />
+            <Button
+              type="submit"
+              text="Login"
+            />
+          </ButtonSet>)
+        }
+      >
         {
           message?.message && (
             <div>{message?.message}</div>
@@ -68,17 +82,8 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
           required={true}
           value={password}
         />
-
-        <Button
-          type="submit"
-          text="Login"
-        />
-
-        <div>
-          <p><Link to="/register">don't have an account?</Link></p>
-        </div>
-      </form>
-    </Container>
+      </Form >
+    </Container >
   )
 }
 

@@ -4,12 +4,17 @@ import FormHeader from "../../components/FormHeader"
 import TextField from "../../components/TextField"
 import Button from "../../components/Button"
 import Container from "../../components/Container"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import ButtonSet from "../../components/ButtonSet"
+import Form from "../../components/Form"
+import CancelButton from '../../components/CancelButton'
 
 const Register = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [message, setMessage] = useState({ message: '', success: false })
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -26,11 +31,22 @@ const Register = () => {
 
   return (
     <Container maxWidth='lg'>
-      <form onSubmit={handleSubmit}>
-        <FormHeader>
-          Register
-        </FormHeader>
-
+      <Form
+        onSubmit={handleSubmit}
+        header='Register'
+        buttonSet={(
+          <ButtonSet>
+            <CancelButton
+              text="have an existing account?"
+              onClick={() => navigate('/login')}
+            />
+            <Button
+              type="submit"
+              text="Login"
+            />
+          </ButtonSet>)
+        }
+      >
         {
           message?.message && (
             <div>{message?.message}</div>
@@ -48,7 +64,7 @@ const Register = () => {
         />
 
         <TextField
-          id='password]'
+          id='password'
           label='password'
           type='password'
           setValue={setPassword}
@@ -57,16 +73,17 @@ const Register = () => {
           value={password}
         />
 
-        <Button
-          type="submit"
-          text="Register"
+        <TextField
+          id='confirmPassword'
+          label='confirm password'
+          type='confirm password'
+          setValue={setConfirmPassword}
+          placeholder=''
+          required={true}
+          value={confirmPassword}
         />
 
-        <div>
-          <p><Link to="/login">have an existing account?</Link></p>
-        </div>
-
-      </form>
+      </Form>
     </Container>
   )
 }

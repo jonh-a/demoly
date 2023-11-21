@@ -5,6 +5,9 @@ import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import Container from '../../components/Container';
 import FormHeader from '../../components/FormHeader';
+import Form from '../../components/Form'
+import ButtonSet from '../../components/ButtonSet'
+import CancelButton from '../../components/CancelButton'
 
 interface Props {
   authenticated: boolean
@@ -42,28 +45,35 @@ const NewSong: React.FC<Props> = (
 
   return (
     <Container>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <FormHeader>
-            Let's give it a name!
-          </FormHeader>
+      <Form
+        onSubmit={handleSubmit}
+        header="Let's give it a name..."
+        buttonSet={(
+          <ButtonSet>
+            <CancelButton
+              text="Cancel"
+              onClick={() => navigate('/songs')}
+            />
+            <Button
+              type="submit"
+              text="Save"
+            />
+          </ButtonSet>
+        )}
+      >
 
-          <TextField
-            id='name'
-            label=''
-            type='text'
-            setValue={setName}
-            placeholder='My Super Creative Song Title'
-            required={true}
-            value={name}
-          />
+        <TextField
+          id='name'
+          label='Title'
+          type='text'
+          setValue={setName}
+          placeholder='My Super Creative Song Title'
+          required={true}
+          value={name}
+        />
 
-          <Button
-            type="submit"
-            text="Save"
-          />
-        </form>
-      </div>
+
+      </Form>
     </Container>
   )
 }
