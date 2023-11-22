@@ -13,8 +13,8 @@ export interface ISong {
 const SongSchema = new Schema<ISong>({
   name: { type: String, required: true },
   userID: { type: String, required: true },
-  notes: { type: String, required: true },
-  content: { type: String, required: true },
+  notes: { type: String, required: false, default: ' ' },
+  content: { type: String, required: false, default: ' ' },
   createdAt: { type: String, required: false },
   updatedAt: { type: String, required: false },
 })

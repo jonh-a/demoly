@@ -8,6 +8,8 @@ interface Props {
   required: boolean;
   maxWidth?: string;
   subtitle?: string;
+  errorText?: string;
+  error?: boolean;
 }
 
 const TextField: React.FC<Props> = ({
@@ -18,7 +20,9 @@ const TextField: React.FC<Props> = ({
   setValue,
   placeholder,
   required,
-  subtitle = ''
+  subtitle = '',
+  error = false,
+  errorText = ''
 }) => {
   return (
     <div className="col-span-full">
@@ -40,6 +44,9 @@ const TextField: React.FC<Props> = ({
         />
         {
           subtitle && (<p className="mt-3 text-sm leading-6 text-gray-600">{subtitle}</p>)
+        }
+        {
+          error && (<p className="mt-3 text-sm leading-6 text-red-600">{errorText}</p>)
         }
       </div>
 

@@ -24,7 +24,20 @@ router.post("/register", async (req: Request, res: Response) => {
     const newUser = new UserModel({ username, email, password: hashedPass })
     await newUser.save();
 
-    return res.json({ success: true, message: 'Registered successfully' })
+    const sessionData = {
+      id: newUser._id,
+    }
+    const token = jwt.sign(sessionData, req.app.locals?.JWT_SECRET || '')
+
+    res.cookie("access_token", token, {
+      secure: app.locals?.PROD || false,
+      httpOnly: true,
+      expires: dayjs().add(30, "days").toDate(),
+    })
+
+    res.json({ success: true })
+
+    return res.send()
   } catch (e: any) {
     console.log(e)
     return res.status(500).json({ success: false, message: 'An unexpected error occurred.' })

@@ -32,7 +32,7 @@ const App = () => {
       <Navbar authenticated={authenticated} />
       <Routes>
         <Route path="/login" element={<Login authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
         <Route path="/logout" element={<Logout setAuthenticated={setAuthenticated} />} />
         <Route path="/songs" element={<Songs authenticated={authenticated} />} />
         <Route path="/new" element={<NewSong authenticated={authenticated} setAuthenticated={setAuthenticated} />} />
