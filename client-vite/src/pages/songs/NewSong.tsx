@@ -1,12 +1,12 @@
-import { useState, SyntheticEvent } from 'react'
+import { useState, SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ServerClient from '../../apis/server'
-import TextField from '../../components/TextField'
-import Button from '../../components/Button'
+import ServerClient from '../../apis/server';
+import TextField from '../../components/TextField';
+import Button from '../../components/Button';
 import Container from '../../components/Container';
-import Form from '../../components/Form'
-import ButtonSet from '../../components/ButtonSet'
-import CancelButton from '../../components/CancelButton'
+import Form from '../../components/Form';
+import ButtonSet from '../../components/ButtonSet';
+import CancelButton from '../../components/CancelButton';
 
 interface Props {
   authenticated: boolean
@@ -19,28 +19,28 @@ const NewSong: React.FC<Props> = (
     setAuthenticated
   }
 ) => {
-  const [name, setName] = useState<string>('')
-  const [_, setMessage] = useState({ message: '', success: true })
+  const [name, setName] = useState<string>('');
+  const [_, setMessage] = useState({ message: '', success: true });
   const navigate = useNavigate();
 
-  if (!authenticated) navigate('/auth')
+  if (!authenticated) navigate('/auth');
 
   const handleSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const resp = await ServerClient.post('/song/new', {
         name
-      }, { withCredentials: true })
+      }, { withCredentials: true });
 
-      if (resp?.status === 403) setAuthenticated(false); navigate('/')
-      if (resp?.status !== 200) setMessage({ message: 'Failed to create song.', success: false })
-      else if (resp?.data?.id) { navigate(`/song/${resp?.data?.id}`) }
+      if (resp?.status === 403) setAuthenticated(false); navigate('/');
+      if (resp?.status !== 200) setMessage({ message: 'Failed to create song.', success: false });
+      else if (resp?.data?.id) { navigate(`/song/${resp?.data?.id}`); }
     } catch (e: any) {
       if (e?.response?.data?.success === false) {
-        setMessage({ success: false, message: e?.response?.data?.message })
+        setMessage({ success: false, message: e?.response?.data?.message });
       }
     }
-  }
+  };
 
   return (
     <Container>
@@ -74,7 +74,7 @@ const NewSong: React.FC<Props> = (
 
       </Form>
     </Container>
-  )
-}
+  );
+};
 
-export default NewSong
+export default NewSong;

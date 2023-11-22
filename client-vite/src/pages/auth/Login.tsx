@@ -1,12 +1,12 @@
-import { useState, SyntheticEvent } from "react"
-import { useNavigate } from "react-router-dom"
-import TextField from "../../components/TextField"
-import Button from "../../components/Button"
-import ServerClient from "../../apis/server"
-import Container from "../../components/Container"
-import Form from '../../components/Form'
-import ButtonSet from '../../components/ButtonSet'
-import CancelButton from '../../components/CancelButton'
+import { useState, SyntheticEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TextField from '../../components/TextField';
+import Button from '../../components/Button';
+import ServerClient from '../../apis/server';
+import Container from '../../components/Container';
+import Form from '../../components/Form';
+import ButtonSet from '../../components/ButtonSet';
+import CancelButton from '../../components/CancelButton';
 
 interface Props {
   authenticated: boolean;
@@ -14,29 +14,29 @@ interface Props {
 }
 
 const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
-  const [username, setUsername] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
-  const [message, setMessage] = useState({ message: '', success: false })
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [message, setMessage] = useState({ message: '', success: false });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  if (authenticated) navigate('/songs')
+  if (authenticated) navigate('/songs');
 
   const handleSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const resp = await ServerClient.post('/user/login', {
         username, password
-      }, { withCredentials: true })
+      }, { withCredentials: true });
 
-      if (resp?.status !== 200) setMessage({ message: 'Failed to sign in.', success: false })
-      else { setAuthenticated(true); navigate("/songs") }
+      if (resp?.status !== 200) setMessage({ message: 'Failed to sign in.', success: false });
+      else { setAuthenticated(true); navigate('/songs'); }
     } catch (e: any) {
       if (e?.response?.data?.success === false) {
-        setMessage({ success: false, message: e?.response?.data?.message })
+        setMessage({ success: false, message: e?.response?.data?.message });
       }
     }
-  }
+  };
 
   return (
     <Container maxWidth='lg'>
@@ -83,7 +83,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
         />
       </Form >
     </Container >
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

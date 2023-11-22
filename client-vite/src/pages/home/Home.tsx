@@ -1,26 +1,26 @@
 import { useEffect } from 'react';
-import Container from '../../components/Container'
-import { useNavigate } from 'react-router-dom'
+import Container from '../../components/Container';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
-    authenticated: boolean;
+  authenticated: boolean;
 }
 
 const Home: React.FC<Props> = ({
-    authenticated,
+  authenticated,
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (authenticated) navigate('/songs')
-    if (!authenticated) navigate('/login')
-  }, [])
+    if (authenticated) navigate('/songs');
+    if (!authenticated) navigate('/login');
+  }, []);
 
   return (
     <Container>
-      
-    </Container>
-  )
-}
 
-export default Home
+    </Container>
+  );
+};
+
+export default Home;

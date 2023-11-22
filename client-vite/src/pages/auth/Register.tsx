@@ -1,12 +1,12 @@
-import { useState, SyntheticEvent, useEffect } from "react"
-import ServerClient from "../../apis/server"
-import TextField from "../../components/TextField"
-import Button from "../../components/Button"
-import Container from "../../components/Container"
-import { useNavigate } from "react-router-dom"
-import ButtonSet from "../../components/ButtonSet"
-import Form from "../../components/Form"
-import CancelButton from '../../components/CancelButton'
+import { useState, SyntheticEvent, useEffect } from 'react';
+import ServerClient from '../../apis/server';
+import TextField from '../../components/TextField';
+import Button from '../../components/Button';
+import Container from '../../components/Container';
+import { useNavigate } from 'react-router-dom';
+import ButtonSet from '../../components/ButtonSet';
+import Form from '../../components/Form';
+import CancelButton from '../../components/CancelButton';
 
 interface Props {
   authenticated: boolean;
@@ -17,43 +17,43 @@ const Register: React.FC<Props> = ({
   authenticated,
   setAuthenticated,
 }) => {
-  const [username, setUsername] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
-  const [confirmPassword, setConfirmPassword] = useState<string>("")
-  const [message, setMessage] = useState({ message: '', success: false })
-  const [passwordGoodEnough, setPasswordGoodEnough] = useState<boolean>(false)
-  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [message, setMessage] = useState({ message: '', success: false });
+  const [passwordGoodEnough, setPasswordGoodEnough] = useState<boolean>(false);
+  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  if (authenticated) navigate('/songs')
+  if (authenticated) navigate('/songs');
 
   useEffect(() => {
-    if (password === confirmPassword) setPasswordsMatch(true)
-    else setPasswordsMatch(false)
+    if (password === confirmPassword) setPasswordsMatch(true);
+    else setPasswordsMatch(false);
 
-    if (password.length >= 8) setPasswordGoodEnough(true)
-    else setPasswordGoodEnough(false)
-  }, [password, confirmPassword])
+    if (password.length >= 8) setPasswordGoodEnough(true);
+    else setPasswordGoodEnough(false);
+  }, [password, confirmPassword]);
 
   const handleSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!passwordGoodEnough || !passwordsMatch) return;
     try {
       const resp = await ServerClient.post('/user/register', {
         username, password
       }, {
         withCredentials: true
-      })
+      });
 
-      if (resp.data?.success) { setAuthenticated(true); navigate('/songs') }
-      else if (!resp?.data?.success && resp?.data.message) setMessage(resp.data)
-      else setMessage({ success: false, message: 'An unexpected error occurred.'})
+      if (resp.data?.success) { setAuthenticated(true); navigate('/songs'); }
+      else if (!resp?.data?.success && resp?.data.message) setMessage(resp.data);
+      else setMessage({ success: false, message: 'An unexpected error occurred.' });
     } catch (e: any) {
       if (e?.response?.data?.success === false) {
-        setMessage({ success: false, message: e?.response?.data?.message })
+        setMessage({ success: false, message: e?.response?.data?.message });
       }
     }
-  }
+  };
 
   return (
     <Container maxWidth='lg'>
@@ -115,7 +115,7 @@ const Register: React.FC<Props> = ({
         />
       </Form>
     </Container>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

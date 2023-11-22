@@ -1,19 +1,19 @@
-import { Fragment, useRef } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { Fragment, useRef } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface Props {
-    open: boolean
-    setOpen: (open: boolean) => void
-    header: string
-    text: string
-    onConfirm: any
-    confirmText: string
-    disabled: boolean
+  open: boolean
+  setOpen: (open: boolean) => void
+  header: string
+  text: string
+  onConfirm: any
+  confirmText: string
+  disabled: boolean
 }
 
-const Modal: React.FC<Props> = ({ 
-  open, 
+const Modal: React.FC<Props> = ({
+  open,
   setOpen,
   header,
   text,
@@ -21,7 +21,7 @@ const Modal: React.FC<Props> = ({
   onConfirm,
   disabled,
 }) => {
-  const cancelButtonRef = useRef(null)
+  const cancelButtonRef = useRef(null);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -92,7 +92,7 @@ const Modal: React.FC<Props> = ({
         </div>
       </Dialog>
     </Transition.Root>
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;

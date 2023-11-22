@@ -3,7 +3,7 @@ const FormHeader = (props: any) => {
     <article className="format lg:format-lg">
       <h3>{props.children}</h3>
     </article>
-  )
-}
+  );
+};
 
-export default FormHeader
+export default FormHeader;

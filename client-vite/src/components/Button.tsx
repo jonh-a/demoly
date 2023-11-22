@@ -19,7 +19,7 @@ const Button: React.FC<Props> = ({
     >
       {text}
     </button>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
-import ServerClient from '../../apis/server'
-import { Link, useNavigate } from 'react-router-dom'
-import Container from '../../components/Container'
-import timeAgoFromString from '../../util/timeAgo'
-import { TrashIcon } from '@heroicons/react/24/outline'
-import Modal from '../../components/Modal'
+import { useEffect, useState } from 'react';
+import ServerClient from '../../apis/server';
+import { Link, useNavigate } from 'react-router-dom';
+import Container from '../../components/Container';
+import timeAgoFromString from '../../util/timeAgo';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import Modal from '../../components/Modal';
 
 interface Props {
   authenticated: boolean
@@ -17,54 +17,54 @@ interface Song {
 }
 
 const Songs: React.FC<Props> = ({ authenticated }) => {
-  const [songs, setSongs] = useState<Song[]>([])
-  const [error, setError] = useState<string>('')
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [selectedSong, setSelectedSong] = useState<Song | null>(null)
-  const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
-  const url = '/song/mine'
-  const navigate = useNavigate()
-  if (!authenticated) navigate('/login')
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [error, setError] = useState<string>('');
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
+  const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
+  const url = '/song/mine';
+  const navigate = useNavigate();
+  if (!authenticated) navigate('/login');
 
   const fetchSongs = async () => {
     try {
-      const resp = await ServerClient.get(url, { withCredentials: true })
+      const resp = await ServerClient.get(url, { withCredentials: true });
 
-      if (!resp.data?.success) setError(resp?.data?.message)
-      if (resp?.data?.items) setSongs(resp?.data?.items || [])
+      if (!resp.data?.success) setError(resp?.data?.message);
+      if (resp?.data?.items) setSongs(resp?.data?.items || []);
     } catch (err) {
-      setError("An unexpected error occurred.")
+      setError('An unexpected error occurred.');
     }
-  }
+  };
 
   const deleteSong = async (id: string) => {
-    const deleteUrl = `/song/${id}`
+    const deleteUrl = `/song/${id}`;
     try {
-      setLoadingDelete(true)
-      const resp = await ServerClient.delete(deleteUrl, { withCredentials: true })
-      setLoadingDelete(false)
+      setLoadingDelete(true);
+      const resp = await ServerClient.delete(deleteUrl, { withCredentials: true });
+      setLoadingDelete(false);
 
       if (resp.data?.success) {
-        setModalOpen(false)
-        setSelectedSong(null)
-        fetchSongs()
+        setModalOpen(false);
+        setSelectedSong(null);
+        fetchSongs();
       }
-      if (!resp.data?.success) setError(resp?.data?.message)
-      if (resp?.data?.items) setSongs(resp?.data?.items || [])
+      if (!resp.data?.success) setError(resp?.data?.message);
+      if (resp?.data?.items) setSongs(resp?.data?.items || []);
     } catch (err) {
-      setLoadingDelete(false)
-      setError("An unexpected error occurred.")
+      setLoadingDelete(false);
+      setError('An unexpected error occurred.');
     }
-  }
+  };
 
   useEffect(() => {
-    fetchSongs()
-  }, [])
+    fetchSongs();
+  }, []);
 
   return (
     <Container maxWidth="2xl">
-      <Modal 
-        open={modalOpen} 
+      <Modal
+        open={modalOpen}
         setOpen={setModalOpen}
         header={`Delete ${selectedSong?.name}`}
         text={`Are you sure you want to delete ${selectedSong?.name}?`}
@@ -95,13 +95,13 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
                   {song?.updatedAt && timeAgoFromString(song?.updatedAt)}
                 </td>
                 <td className="px-6 py-4 float-right">
-                  <Link to={`#`}>
+                  <Link to={'#'}>
                     {
-                      <TrashIcon 
-                        className='h-6 w-6' 
+                      <TrashIcon
+                        className='h-6 w-6'
                         onClick={() => {
-                          setSelectedSong(song)
-                          setModalOpen(true)
+                          setSelectedSong(song);
+                          setModalOpen(true);
                         }}
                       />
                     }
@@ -113,7 +113,7 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
         </tbody>
       </table>
     </Container>
-  )
-}
+  );
+};
 
-export default Songs
+export default Songs;

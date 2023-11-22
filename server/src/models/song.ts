@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 export interface ISong {
   _id?: string;
@@ -17,6 +17,6 @@ const SongSchema = new Schema<ISong>({
   content: { type: String, required: false, default: ' ' },
   createdAt: { type: String, required: false },
   updatedAt: { type: String, required: false },
-})
+});
 
-export const SongModel = model<ISong>("song", SongSchema)
+export const SongModel = model<ISong>('song', SongSchema);

@@ -3,7 +3,7 @@ const ButtonSet = (props: any) => {
     <div className="mt-6 flex items-center justify-end gap-x-6">
       {props.children}
     </div>
-  )
-}
+  );
+};
 
-export default ButtonSet
+export default ButtonSet;

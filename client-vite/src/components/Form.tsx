@@ -1,4 +1,4 @@
-import FormHeader from "./FormHeader"
+import FormHeader from './FormHeader';
 
 const Form = (props: any) => {
   return (
@@ -20,7 +20,7 @@ const Form = (props: any) => {
         {props?.buttonSet}
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default Form
+export default Form;

@@ -7,7 +7,7 @@ const CancelButton = (props: any) => {
     >
       {props?.text}
     </button>
-  )
-}
+  );
+};
 
-export default CancelButton
+export default CancelButton;

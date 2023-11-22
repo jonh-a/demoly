@@ -5,21 +5,21 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { v4 as uuidv4 } from 'uuid';
 
-import { userRouter } from './src/routes/user'
-import { songRouter } from './src/routes/song'
+import { userRouter } from './src/routes/user';
+import { songRouter } from './src/routes/song';
 
-dotenv.config()
+dotenv.config();
 
-const MONGO_CONN = process.env?.MONGO_CONN || ''
+const MONGO_CONN = process.env?.MONGO_CONN || '';
 
 const app: Express = express();
 const version: string = '0.0.1';
 
-app.locals.JWT_SECRET = process.env?.JWT_SECRET || ''
-app.locals.PROD = process.env?.NODE_ENV === 'prod'
+app.locals.JWT_SECRET = process.env?.JWT_SECRET || '';
+app.locals.PROD = process.env?.NODE_ENV === 'prod';
 
-app.use(express.json())
-app.use(cookieParser())
+app.use(express.json());
+app.use(cookieParser());
 app.use(cors({
   credentials: true,
   origin: [
@@ -30,11 +30,11 @@ app.use(cors({
   ],
 }));
 
-mongoose.connect(MONGO_CONN)
+mongoose.connect(MONGO_CONN);
 
 app.get('/health', (req: Request, res: Response) => res.json({ status: 'OK' }));
 app.get('/version', (req: Request, res: Response) => res.json({ version }));
-app.use('/user', userRouter)
-app.use('/song', songRouter)
+app.use('/user', userRouter);
+app.use('/song', songRouter);
 
 export default app;  

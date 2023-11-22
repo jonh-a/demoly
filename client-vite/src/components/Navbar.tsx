@@ -1,17 +1,17 @@
-import { Link } from 'react-router-dom'
-import { Disclosure } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Link } from 'react-router-dom';
+import { Disclosure } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Songs', href: '/songs', current: false, auth: true },
   { name: 'New Song', href: '/new', current: false, auth: true },
   { name: 'Settings', href: '/settings', current: false, auth: true },
   { name: 'Logout', href: '/logout', current: false, auth: true }
-]
+];
 
 const classNames = (...classes: any[]) => {
-  return classes.filter(Boolean).join(' ')
-}
+  return classes.filter(Boolean).join(' ');
+};
 
 interface MobileMenuButtonProps {
   open: boolean;
@@ -27,7 +27,7 @@ const MobileMenuButton: React.FC<MobileMenuButtonProps> = ({ open }) => (
       <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
     )}
   </Disclosure.Button>
-)
+);
 
 interface Props {
   authenticated: boolean
@@ -47,7 +47,7 @@ const Navbar: React.FC<Props> = ({
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <Link to={authenticated ? "/songs" : '/login'}>
+                  <Link to={authenticated ? '/songs' : '/login'}>
                     <article className="prose-h2 text-white">Demoly</article>
                   </Link>
                 </div>
@@ -99,7 +99,7 @@ const Navbar: React.FC<Props> = ({
         </>
       )}
     </Disclosure>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

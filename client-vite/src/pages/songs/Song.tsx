@@ -1,15 +1,15 @@
-import { useState, useEffect, SyntheticEvent } from 'react'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import ServerClient from '../../apis/server'
-import TextField from '../../components/TextField'
-import TextArea from '../../components/TextArea'
-import Button from '../../components/Button'
-import Container from '../../components/Container'
-import Form from '../../components/Form'
-import ButtonSet from '../../components/ButtonSet'
-import CancelButton from '../../components/CancelButton'
-import Modal from '../../components/Modal'
+import { useState, useEffect, SyntheticEvent } from 'react';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import ServerClient from '../../apis/server';
+import TextField from '../../components/TextField';
+import TextArea from '../../components/TextArea';
+import Button from '../../components/Button';
+import Container from '../../components/Container';
+import Form from '../../components/Form';
+import ButtonSet from '../../components/ButtonSet';
+import CancelButton from '../../components/CancelButton';
+import Modal from '../../components/Modal';
 
 interface Props {
   authenticated: boolean
@@ -22,46 +22,46 @@ const Song: React.FC<Props> = (
     setAuthenticated
   }
 ) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  if (!authenticated) navigate('/login')
-  const { id = '' } = useParams()
-  const [error, setError] = useState('')
+  if (!authenticated) navigate('/login');
+  const { id = '' } = useParams();
+  const [error, setError] = useState('');
 
-  const [name, setName] = useState<string>('')
-  const [_, setNotes] = useState<string>('')
-  const [__, setContent] = useState<string>('')
+  const [name, setName] = useState<string>('');
+  const [_, setNotes] = useState<string>('');
+  const [__, setContent] = useState<string>('');
 
-  const [newName, setNewName] = useState<string>('')
-  const [newNotes, setNewNotes] = useState<string>('')
-  const [newContent, setNewContent] = useState<string>('')
+  const [newName, setNewName] = useState<string>('');
+  const [newNotes, setNewNotes] = useState<string>('');
+  const [newContent, setNewContent] = useState<string>('');
 
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const url = `/song/${id}`
+  const url = `/song/${id}`;
 
   const fetchSong = async () => {
     try {
-      const resp = await ServerClient.get(url, { withCredentials: true })
+      const resp = await ServerClient.get(url, { withCredentials: true });
 
-      if (resp.status === 403) { setAuthenticated(false); navigate('/') }
-      if (!resp.data?.success) setError(resp?.data?.message)
+      if (resp.status === 403) { setAuthenticated(false); navigate('/'); }
+      if (!resp.data?.success) setError(resp?.data?.message);
       if (resp?.data?.items?.name) {
-        setName(resp?.data?.items?.name || '')
-        setNewName(resp?.data?.items?.name || '')
+        setName(resp?.data?.items?.name || '');
+        setNewName(resp?.data?.items?.name || '');
       }
       if (resp?.data?.items?.notes) {
-        setNotes(resp?.data?.items?.notes || '')
-        setNewNotes(resp?.data?.items?.notes || '')
+        setNotes(resp?.data?.items?.notes || '');
+        setNewNotes(resp?.data?.items?.notes || '');
       }
       if (resp?.data?.items?.content) {
-        setContent(resp?.data?.items?.content || '')
-        setNewContent(resp?.data?.items?.content || '')
+        setContent(resp?.data?.items?.content || '');
+        setNewContent(resp?.data?.items?.content || '');
       }
     } catch (err) {
-      setError("An unexpected error occurred.")
+      setError('An unexpected error occurred.');
     }
-  }
+  };
 
   const updateSong = async () => {
     try {
@@ -69,33 +69,33 @@ const Song: React.FC<Props> = (
         url,
         { name: newName, notes: newNotes, content: newContent },
         { withCredentials: true }
-      )
+      );
 
-      if (!resp.data?.success) { setError(resp?.data?.message); return false }
+      if (!resp.data?.success) { setError(resp?.data?.message); return false; }
       return true;
     } catch (err) {
-      setError("An unexpected error occurred.")
+      setError('An unexpected error occurred.');
       return false;
     }
-  }
+  };
 
-  useEffect(() => { fetchSong() }, [])
+  useEffect(() => { fetchSong(); }, []);
 
   const handleSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault()
-    const updated = await updateSong()
-    if (updated) await fetchSong()
-    if (!updated) setError('Failed to update.')
-  }
+    e.preventDefault();
+    const updated = await updateSong();
+    if (updated) await fetchSong();
+    if (!updated) setError('Failed to update.');
+  };
 
   return (
     <Container>
       {error && (<p>{error}</p>)}
-      <Modal 
-        open={modalOpen} 
+      <Modal
+        open={modalOpen}
         setOpen={setModalOpen}
         header={'Are you sure you want to leave?'}
-        text={`All unsaved changes will be lost.`}
+        text={'All unsaved changes will be lost.'}
         confirmText='Leave'
         onConfirm={() => navigate('/')}
         disabled={false}
@@ -143,11 +143,11 @@ const Song: React.FC<Props> = (
           placeholder=''
           required={false}
           value={newContent}
-          rows={newContent.split("\n").length || 20}
+          rows={newContent.split('\n').length || 20}
         />
       </Form>
     </Container>
-  )
-}
+  );
+};
 
-export default Song
+export default Song;
