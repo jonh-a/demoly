@@ -10,6 +10,7 @@ import Form from '../../components/Form';
 import ButtonSet from '../../components/ButtonSet';
 import CancelButton from '../../components/CancelButton';
 import Modal from '../../components/Modal';
+import Recorder from '../../components/Recorder'
 
 interface Props {
   authenticated: boolean
@@ -133,7 +134,7 @@ const Song: React.FC<Props> = (
           placeholder=''
           required={false}
           value={newNotes}
-          rows={5}
+          rows={2}
         />
 
         <TextArea
@@ -144,6 +145,10 @@ const Song: React.FC<Props> = (
           required={false}
           value={newContent}
           rows={newContent.split('\n').length || 20}
+        />
+
+        <Recorder
+          songID={id}
         />
       </Form>
     </Container>
