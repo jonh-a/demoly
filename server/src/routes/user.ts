@@ -15,9 +15,16 @@ router.post('/register', async (req: Request, res: Response) => {
   try {
     const { username = '', password = '', email = '' } = req.body;
 
-    const user = await UserModel.findOne({ username });
+    if (!username || !email || !password) {
+      return res.status(400).json({ success: false, message: 'Credentials not provided.' });
+    }
 
-    if (user) return res.status(400).json({ success: false, message: 'User already exists.' });
+    const user = await UserModel.findOne({ $or: [{ username }, { email }] });
+    console.log(user);
+
+    if (user) {
+      return res.status(400).json({ success: false, message: 'User already exists.' });
+    }
 
     const hashedPass = await bcrypt.hash(password, 10);
     const newUser = new UserModel({ username, email, password: hashedPass });

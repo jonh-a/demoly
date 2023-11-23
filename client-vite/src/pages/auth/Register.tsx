@@ -18,6 +18,7 @@ const Register: React.FC<Props> = ({
   setAuthenticated,
 }) => {
   const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [message, setMessage] = useState({ message: '', success: false });
@@ -40,7 +41,7 @@ const Register: React.FC<Props> = ({
     if (!passwordGoodEnough || !passwordsMatch) return;
     try {
       const resp = await ServerClient.post('/user/register', {
-        username, password
+        username, password, email
       }, {
         withCredentials: true
       });
@@ -88,6 +89,16 @@ const Register: React.FC<Props> = ({
           placeholder='himynameis'
           required={true}
           value={username}
+        />
+
+        <TextField
+          id='email'
+          label='email'
+          type='email'
+          setValue={setEmail}
+          placeholder='myemail@example.com'
+          required={true}
+          value={email}
         />
 
         <TextField

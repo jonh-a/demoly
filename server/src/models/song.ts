@@ -8,7 +8,7 @@ export interface ISong {
   content: string;
   createdAt: string;
   updatedAt: string;
-  audio: String;
+  audio: string;
 }
 
 const SongSchema = new Schema<ISong>({
