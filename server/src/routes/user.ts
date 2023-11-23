@@ -6,6 +6,7 @@ import { UserModel, IUser } from '../models/user';
 import dayjs from 'dayjs';
 import app from '../../app';
 import verifyToken from '../middleware/verifyToken';
+import { WhitelistedUserModel } from '../models/whitelistedUser';
 
 dotenv.config();
 
@@ -20,10 +21,14 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     const user = await UserModel.findOne({ $or: [{ username }, { email }] });
-    console.log(user);
 
     if (user) {
       return res.status(400).json({ success: false, message: 'User already exists.' });
+    }
+
+    const whitelistedUser = await WhitelistedUserModel.findOne({ email });
+    if (!whitelistedUser) {
+      return res.status(400).json({ success: false, message: 'Email not whitelisted for registration.' });
     }
 
     const hashedPass = await bcrypt.hash(password, 10);
