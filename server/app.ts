@@ -18,7 +18,7 @@ app.locals.JWT_SECRET = process.env?.JWT_SECRET || '';
 app.locals.PROD = process.env?.NODE_ENV === 'prod';
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
   credentials: true,

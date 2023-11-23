@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { SongModel } from '../models/song';
 import verifyToken from '../middleware/verifyToken';
-import multer from 'multer'
+import multer from 'multer';
 
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({ dest: 'uploads/' });
 
 const router = Router();
 
@@ -63,11 +63,11 @@ router.put('/:id/take', verifyToken, upload.single('file'), async (req: RequestW
     if (!userID) return res.status(403).json({ success: false, message: 'Unauthenticated.' });
 
     const { id = '' } = req.params;
-    const file = req?.file
-    if (!file) return res.json({ success: false, message: 'No files were uploaded.' })
-    console.log(file)
+    const file = req?.file;
+    if (!file) return res.json({ success: false, message: 'No files were uploaded.' });
+    console.log(file);
 
-    return res.json({ success: true })
+    return res.json({ success: true });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ success: false, message: 'An unexpected error occurred.' });
