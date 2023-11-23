@@ -1,36 +1,36 @@
 import { useState } from 'react';
 import { AudioRecorder } from 'react-audio-voice-recorder';
-import ServerClient from '../apis/server'
-import Button from './Button'
+import ServerClient from '../apis/server';
+// import Button from './Button';
 
 interface Props {
   songID: string;
 }
 
 const Recorder: React.FC<Props> = ({ songID }) => {
-  const [audioBlob, setAudioBlob] = useState<Blob>(new Blob())
-  const [audioBlobUrl, setAudioBlobUrl] = useState<string | null>(null)
+  const [audioBlob, setAudioBlob] = useState<Blob>(new Blob());
+  const [audioBlobUrl, setAudioBlobUrl] = useState<string | null>(null);
 
   const storeRecordingInBrowser = (blob: Blob) => {
-    setAudioBlob(blob)
-    const url: string = URL.createObjectURL(blob)
-    setAudioBlobUrl(url)
-  }
+    setAudioBlob(blob);
+    const url: string = URL.createObjectURL(blob);
+    setAudioBlobUrl(url);
+  };
 
   const uploadRecording = async () => {
-    let formData = new FormData();
-    const file = new File([audioBlob], 'myfile')
-    formData.append('file', file)
+    const formData = new FormData();
+    const file = new File([audioBlob], 'myfile');
+    formData.append('file', file);
     await ServerClient.put(
       `/song/${songID}/take`,
       formData,
       {
         headers: {
-          'Content-Type': `multipart/form-data`,
+          'Content-Type': 'multipart/form-data',
         }
       }
-    )
-  }
+    );
+  };
 
   return (
     <div>
@@ -64,7 +64,7 @@ const Recorder: React.FC<Props> = ({ songID }) => {
         )
       }
     </div>
-  )
-}
+  );
+};
 
-export default Recorder
+export default Recorder;

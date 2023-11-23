@@ -24,6 +24,7 @@ const Register: React.FC<Props> = ({
   const [message, setMessage] = useState({ message: '', success: false });
   const [passwordGoodEnough, setPasswordGoodEnough] = useState<boolean>(false);
   const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   if (authenticated) navigate('/songs');
@@ -39,17 +40,20 @@ const Register: React.FC<Props> = ({
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     if (!passwordGoodEnough || !passwordsMatch) return;
+    setLoading(true);
     try {
       const resp = await ServerClient.post('/user/register', {
         username, password, email
       }, {
         withCredentials: true
       });
+      setLoading(false);
 
       if (resp.data?.success) { setAuthenticated(true); navigate('/songs'); }
       else if (!resp?.data?.success && resp?.data.message) setMessage(resp.data);
       else setMessage({ success: false, message: 'An unexpected error occurred.' });
     } catch (e: any) {
+      setLoading(false);
       if (e?.response?.data?.success === false) {
         setMessage({ success: false, message: e?.response?.data?.message });
       }
@@ -70,7 +74,7 @@ const Register: React.FC<Props> = ({
             <Button
               type="submit"
               text="Register"
-              disabled={!passwordGoodEnough || !passwordsMatch || !username}
+              disabled={!passwordGoodEnough || !passwordsMatch || !username || loading}
             />
           </ButtonSet>)
         }

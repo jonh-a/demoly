@@ -10,7 +10,7 @@ import Form from '../../components/Form';
 import ButtonSet from '../../components/ButtonSet';
 import CancelButton from '../../components/CancelButton';
 import Modal from '../../components/Modal';
-import Recorder from '../../components/Recorder'
+import Recorder from '../../components/Recorder';
 
 interface Props {
   authenticated: boolean
@@ -38,6 +38,7 @@ const Song: React.FC<Props> = (
   const [newContent, setNewContent] = useState<string>('');
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 
   const url = `/song/${id}`;
 
@@ -65,6 +66,7 @@ const Song: React.FC<Props> = (
   };
 
   const updateSong = async () => {
+    setLoadingSubmit(true);
     try {
       const resp = await ServerClient.put(
         url,
@@ -72,9 +74,12 @@ const Song: React.FC<Props> = (
         { withCredentials: true }
       );
 
+      setLoadingSubmit(false);
+
       if (!resp.data?.success) { setError(resp?.data?.message); return false; }
       return true;
     } catch (err) {
+      setLoadingSubmit(false);
       setError('An unexpected error occurred.');
       return false;
     }
@@ -108,10 +113,12 @@ const Song: React.FC<Props> = (
           <CancelButton
             text="Cancel"
             onClick={() => setModalOpen(true)}
+            disabled={loadingSubmit}
           />
           <Button
             text='Save'
             type='submit'
+            disabled={loadingSubmit}
           />
         </ButtonSet>)}
 

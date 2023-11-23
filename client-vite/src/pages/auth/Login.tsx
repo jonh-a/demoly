@@ -17,6 +17,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [message, setMessage] = useState({ message: '', success: false });
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -24,14 +25,17 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const resp = await ServerClient.post('/user/login', {
         username, password
       }, { withCredentials: true });
+      setLoading(false);
 
       if (resp?.status !== 200) setMessage({ message: 'Failed to sign in.', success: false });
       else { setAuthenticated(true); navigate('/songs'); }
     } catch (e: any) {
+      setLoading(false);
       if (e?.response?.data?.success === false) {
         setMessage({ success: false, message: e?.response?.data?.message });
       }
@@ -52,6 +56,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
             <Button
               type="submit"
               text="Login"
+              disabled={!username || !password || loading}
             />
           </ButtonSet>)
         }
