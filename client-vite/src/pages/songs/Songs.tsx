@@ -5,6 +5,8 @@ import Container from '../../components/Container';
 import timeAgoFromString from '../../util/timeAgo';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import Modal from '../../components/Modal';
+import Toast from '../../components/Toast';
+import { ToastData } from '../../definitions';
 
 interface Props {
   authenticated: boolean
@@ -17,8 +19,9 @@ interface Song {
 }
 
 const Songs: React.FC<Props> = ({ authenticated }) => {
+  const [toast, setToast] = useState<ToastData>({ type: 'success', message: '' });
+  const [toastOpen, setToastOpen] = useState<boolean>(false);
   const [songs, setSongs] = useState<Song[]>([]);
-  const [error, setError] = useState<string>('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
@@ -30,10 +33,17 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
     try {
       const resp = await ServerClient.get(url, { withCredentials: true });
 
-      if (!resp.data?.success) setError(resp?.data?.message);
+      if (!resp.data?.success) {
+        setToast({
+          type: 'error',
+          message: resp?.data?.message || 'An unexpected error occurred.'
+        });
+        setToastOpen(true);
+      }
       if (resp?.data?.items) setSongs(resp?.data?.items || []);
     } catch (err) {
-      setError('An unexpected error occurred.');
+      setToast({ type: 'error', message: 'An unexpected error occurred.' });
+      setToastOpen(true);
     }
   };
 
@@ -49,20 +59,31 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
         setSelectedSong(null);
         fetchSongs();
       }
-      if (!resp.data?.success) setError(resp?.data?.message);
+      if (!resp.data?.success) {
+        setToast({ type: 'error', message: 'An unexpected error occurred.' });
+        setToastOpen(true);
+      }
       if (resp?.data?.items) setSongs(resp?.data?.items || []);
     } catch (err) {
       setLoadingDelete(false);
-      setError('An unexpected error occurred.');
+      setToast({ type: 'error', message: 'An unexpected error occurred.' });
+      setToastOpen(true);
     }
   };
 
-  useEffect(() => {
-    fetchSongs();
-  }, []);
+  useEffect(() => { fetchSongs(); }, []);
 
   return (
     <Container maxWidth="2xl">
+      {toastOpen && (
+        <Toast
+          type={toast.type}
+          header=''
+          text={toast.message}
+          open={toastOpen}
+          setOpen={setToastOpen}
+        />
+      )}
       <Modal
         open={modalOpen}
         setOpen={setModalOpen}
@@ -72,7 +93,6 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
         onConfirm={() => deleteSong(selectedSong?._id || '')}
         disabled={loadingDelete}
       />
-      {error && <p>{error}</p>}
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
