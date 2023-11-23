@@ -7,6 +7,8 @@ import Container from '../../components/Container';
 import Form from '../../components/Form';
 import ButtonSet from '../../components/ButtonSet';
 import CancelButton from '../../components/CancelButton';
+import Toast from '../../components/Toast';
+import { ToastData } from '../../definitions';
 
 interface Props {
   authenticated: boolean;
@@ -16,8 +18,9 @@ interface Props {
 const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [message, setMessage] = useState({ message: '', success: false });
   const [loading, setLoading] = useState<boolean>(false);
+  const [toast, setToast] = useState<ToastData>({ type: 'success', message: '' });
+  const [toastOpen, setToastOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -32,18 +35,37 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
       }, { withCredentials: true });
       setLoading(false);
 
-      if (resp?.status !== 200) setMessage({ message: 'Failed to sign in.', success: false });
+      if (resp?.status !== 200) {
+        setToast({
+          message: resp?.data?.message || 'Failed to sign in.',
+          type: 'error'
+        });
+        setToastOpen(true);
+      }
       else { setAuthenticated(true); navigate('/songs'); }
     } catch (e: any) {
       setLoading(false);
       if (e?.response?.data?.success === false) {
-        setMessage({ success: false, message: e?.response?.data?.message });
+        setToast({
+          message: e?.response?.data?.message || 'Failed to sign in.',
+          type: 'error'
+        });
+        setToastOpen(true);
       }
     }
   };
 
   return (
     <Container maxWidth='lg'>
+      {toastOpen && (
+        <Toast
+          type={toast.type}
+          header=''
+          text={toast.message}
+          open={toastOpen}
+          setOpen={setToastOpen}
+        />
+      )}
       <Form
         onSubmit={handleSubmit}
         header='Login'
@@ -61,12 +83,6 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
           </ButtonSet>)
         }
       >
-        {
-          message?.message && (
-            <div>{message?.message}</div>
-          )
-        }
-
         <TextField
           id='username'
           label='username'

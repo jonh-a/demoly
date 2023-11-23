@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import ButtonSet from '../../components/ButtonSet';
 import Form from '../../components/Form';
 import CancelButton from '../../components/CancelButton';
+import Toast from '../../components/Toast';
+import { ToastData } from '../../definitions';
 
 interface Props {
   authenticated: boolean;
@@ -21,10 +23,11 @@ const Register: React.FC<Props> = ({
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [message, setMessage] = useState({ message: '', success: false });
   const [passwordGoodEnough, setPasswordGoodEnough] = useState<boolean>(false);
   const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [toast, setToast] = useState<ToastData>({ type: 'success', message: '' });
+  const [toastOpen, setToastOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
   if (authenticated) navigate('/songs');
@@ -49,19 +52,43 @@ const Register: React.FC<Props> = ({
       });
       setLoading(false);
 
-      if (resp.data?.success) { setAuthenticated(true); navigate('/songs'); }
-      else if (!resp?.data?.success && resp?.data.message) setMessage(resp.data);
-      else setMessage({ success: false, message: 'An unexpected error occurred.' });
+      if (resp.data?.success) {
+        setAuthenticated(true);
+        navigate('/songs');
+      } else if (resp?.status === 400) {
+        setToast({
+          message: resp?.data?.message || 'Failed to register.',
+          type: 'error'
+        });
+        setToastOpen(true);
+      } else {
+        setToast({
+          message: 'An unexpected error occurred when registering.',
+          type: 'error'
+        });
+        setToastOpen(true);
+      }
     } catch (e: any) {
       setLoading(false);
-      if (e?.response?.data?.success === false) {
-        setMessage({ success: false, message: e?.response?.data?.message });
-      }
+      setToast({
+        message: e?.response?.data?.message || 'An unexpected error occurred when registering.',
+        type: 'error'
+      });
+      setToastOpen(true);
     }
   };
 
   return (
     <Container maxWidth='lg'>
+      {toastOpen && (
+        <Toast
+          type={toast.type}
+          header=''
+          text={toast.message}
+          open={toastOpen}
+          setOpen={setToastOpen}
+        />
+      )}
       <Form
         onSubmit={handleSubmit}
         header='Register'
@@ -79,12 +106,6 @@ const Register: React.FC<Props> = ({
           </ButtonSet>)
         }
       >
-        {
-          message?.message && (
-            <div>{message?.message}</div>
-          )
-        }
-
         <TextField
           id='username'
           label='username'
