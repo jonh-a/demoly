@@ -7,6 +7,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import Modal from '../../components/Modal';
 import Toast from '../../components/Toast';
 import { ToastData } from '../../definitions';
+import Spinner from '../../components/Spinner';
 
 interface Props {
   authenticated: boolean
@@ -25,13 +26,18 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
+  const [loadingSongs, setLoadingSongs] = useState<boolean>(false);
+
   const url = '/song/mine';
+
   const navigate = useNavigate();
-  if (!authenticated) navigate('/login');
+  //if (!authenticated) navigate('/login');
 
   const fetchSongs = async () => {
     try {
+      setLoadingSongs(true);
       const resp = await ServerClient.get(url, { withCredentials: true });
+      setLoadingSongs(false);
 
       if (!resp.data?.success) {
         setToast({
@@ -72,6 +78,17 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
   };
 
   useEffect(() => { fetchSongs(); }, []);
+  useEffect(() => {
+    if (!authenticated) navigate('/login');
+  }, [authenticated]);
+
+  if (loadingSongs) {
+    return (
+      <Container>
+        <Spinner />
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="2xl">

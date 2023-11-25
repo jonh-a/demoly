@@ -13,6 +13,7 @@ import Modal from '../../components/Modal';
 import Recorder from '../../components/Recorder';
 import Toast from '../../components/Toast';
 import { ToastData } from '../../definitions';
+import Spinner from '../../components/Spinner';
 
 interface Props {
   authenticated: boolean
@@ -25,9 +26,6 @@ const Song: React.FC<Props> = (
     setAuthenticated
   }
 ) => {
-  const navigate = useNavigate();
-
-  if (!authenticated) navigate('/login');
   const { id = '' } = useParams();
   const [toast, setToast] = useState<ToastData>({ type: 'success', message: '' });
   const [toastOpen, setToastOpen] = useState<boolean>(false);
@@ -42,12 +40,19 @@ const Song: React.FC<Props> = (
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
+  const [loadingSong, setLoadingSong] = useState<boolean>(false);
 
   const url = `/song/${id}`;
 
+  const navigate = useNavigate();
+
+  useEffect(() => { if (!authenticated) navigate('/login'); }, [authenticated]);
+
   const fetchSong = async () => {
     try {
+      setLoadingSong(true);
       const resp = await ServerClient.get(url, { withCredentials: true });
+      setLoadingSong(false);
 
       if (resp.status === 403) { setAuthenticated(false); navigate('/'); }
       if (!resp.data?.success) {
@@ -107,6 +112,14 @@ const Song: React.FC<Props> = (
     const updated = await updateSong();
     if (updated) await fetchSong();
   };
+
+  if (loadingSong) {
+    return (
+      <Container>
+        <Spinner />
+      </Container>
+    );
+  }
 
   return (
     <Container>

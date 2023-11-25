@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent } from 'react';
+import { useState, SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextField from '../../components/TextField';
 import Button from '../../components/Button';
@@ -24,7 +24,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
 
   const navigate = useNavigate();
 
-  if (authenticated) navigate('/songs');
+  useEffect(() => { if (authenticated) navigate('/songs'); }, [authenticated]);
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
