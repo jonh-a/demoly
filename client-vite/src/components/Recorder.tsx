@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AudioRecorder } from 'react-audio-voice-recorder';
 import ServerClient from '../apis/server';
-// import Button from './Button';
+import Button from './Button';
+import ButtonSet from './ButtonSet';
+import CancelButton from './CancelButton';
 
 interface Props {
   songID: string;
@@ -9,13 +11,17 @@ interface Props {
 
 const Recorder: React.FC<Props> = ({ songID }) => {
   const [audioBlob, setAudioBlob] = useState<Blob>(new Blob());
-  const [audioBlobUrl, setAudioBlobUrl] = useState<string | null>(null);
+  const [audioBlobUrl, setAudioBlobUrl] = useState<string>('');
+  const [uploadDisabled, setUploadDisabled] = useState<boolean>(true);
 
   const storeRecordingInBrowser = (blob: Blob) => {
     setAudioBlob(blob);
     const url: string = URL.createObjectURL(blob);
     setAudioBlobUrl(url);
+    setUploadDisabled(false);
   };
+
+  useEffect(() => console.log(audioBlobUrl));
 
   const uploadRecording = async () => {
     const formData = new FormData();
@@ -33,7 +39,13 @@ const Recorder: React.FC<Props> = ({ songID }) => {
   };
 
   return (
-    <div>
+    <div className='col-span-full w-full mx-auto'>
+      <label
+        htmlFor={'asdf'}
+        className="block text-sm font-medium leading-6 text-gray-900"
+      >
+        New take
+      </label>
       <AudioRecorder
         onRecordingComplete={storeRecordingInBrowser}
         audioTrackConstraints={{
@@ -56,13 +68,22 @@ const Recorder: React.FC<Props> = ({ songID }) => {
               src={audioBlobUrl}
               controls={true}
             />
-            <button
-              type="button"
-              onClick={uploadRecording}
-            >Upload</button>
           </>
         )
       }
+      <ButtonSet justify='start'>
+        <CancelButton
+          text="View previous takes"
+          onClick={() => console.log(true)}
+          disabled={false}
+        />
+        <Button
+          type="button"
+          onClick={uploadRecording}
+          text='Upload'
+          disabled={uploadDisabled}
+        />
+      </ButtonSet>
     </div>
   );
 };

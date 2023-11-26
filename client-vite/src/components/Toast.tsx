@@ -35,7 +35,7 @@ const Toast: React.FC<Props> = ({
     <>
       {
         open && (
-          <div className={`my-3 bg-${colors[type]}-100 border border-${colors[type]}-400 text-${colors[type]}-700 px-4 py-3 rounded relative`} role="alert">
+          <div className={`my-3 bg-${colors[type]}-200 border border-${colors[type]}-400 text-${colors[type]}-700 px-4 py-3 rounded relative`} role="alert">
             <strong className="font-bold">{header} </strong>
             <span className="block sm:inline">{text}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3">

@@ -3,7 +3,6 @@
 import flowbite from 'flowbite/plugin';
 import flowbiteTypography from 'flowbite-typography';
 import defaultTheme from 'tailwindcss/defaultTheme';
-import daisyui from 'daisyui';
 
 export default {
   content: [

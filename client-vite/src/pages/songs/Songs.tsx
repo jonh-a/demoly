@@ -78,9 +78,7 @@ const Songs: React.FC<Props> = ({ authenticated }) => {
   };
 
   useEffect(() => { fetchSongs(); }, []);
-  useEffect(() => {
-    if (!authenticated) navigate('/login');
-  }, [authenticated]);
+  useEffect(() => { if (!authenticated) navigate('/login'); }, [authenticated]);
 
   if (loadingSongs) {
     return (
