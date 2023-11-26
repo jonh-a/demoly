@@ -13,29 +13,41 @@ const Recorder: React.FC<Props> = ({ songID }) => {
   const [audioBlob, setAudioBlob] = useState<Blob>(new Blob());
   const [audioBlobUrl, setAudioBlobUrl] = useState<string>('');
   const [uploadDisabled, setUploadDisabled] = useState<boolean>(true);
+  const [alreadyUploaded, setAlreadyUploaded] = useState<boolean>(false);
 
   const storeRecordingInBrowser = (blob: Blob) => {
     setAudioBlob(blob);
     const url: string = URL.createObjectURL(blob);
     setAudioBlobUrl(url);
+    setAlreadyUploaded(false);
     setUploadDisabled(false);
   };
 
   useEffect(() => console.log(audioBlobUrl));
 
   const uploadRecording = async () => {
-    const formData = new FormData();
-    const file = new File([audioBlob], 'myfile');
-    formData.append('file', file);
-    await ServerClient.put(
-      `/song/${songID}/take`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+    try {
+      setUploadDisabled(true)
+      const formData = new FormData();
+      const file = new File([audioBlob], 'myfile');
+      formData.append('file', file);
+      await ServerClient.put(
+        `/song/${songID}/take`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          timeout: 50000,
         }
-      }
-    );
+      );
+      setUploadDisabled(false)
+      setAlreadyUploaded(true)
+    } catch {
+      setUploadDisabled(false)
+      setAlreadyUploaded(false)
+    }
+
   };
 
   return (
@@ -80,8 +92,8 @@ const Recorder: React.FC<Props> = ({ songID }) => {
         <Button
           type="button"
           onClick={uploadRecording}
-          text='Upload'
-          disabled={uploadDisabled}
+          text={alreadyUploaded ? 'Uploaded' : 'Upload'}
+          disabled={uploadDisabled || alreadyUploaded}
         />
       </ButtonSet>
     </div>

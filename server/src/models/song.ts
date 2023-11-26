@@ -9,6 +9,7 @@ export interface ISong {
   createdAt: string;
   updatedAt: string;
   audio: string;
+  takes: string[];
 }
 
 const SongSchema = new Schema<ISong>({
@@ -18,7 +19,8 @@ const SongSchema = new Schema<ISong>({
   content: { type: String, required: false, default: ' ' },
   createdAt: { type: String, required: false },
   updatedAt: { type: String, required: false },
-  audio: { type: String, required: false }
+  audio: { type: String, required: false, default: '' },
+  takes: { type: [String], required: false, default: [] },
 });
 
 export const SongModel = model<ISong>('song', SongSchema);

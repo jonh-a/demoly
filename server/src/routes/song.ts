@@ -2,8 +2,36 @@ import { Router, Request, Response } from 'express';
 import { SongModel } from '../models/song';
 import verifyToken from '../middleware/verifyToken';
 import multer from 'multer';
+import { S3Client } from '@aws-sdk/client-s3'
+import multerS3 from 'multer-s3'
+import dotenv from 'dotenv'
 
-const upload = multer({ dest: 'uploads/' });
+dotenv.config()
+
+const s3 = new S3Client({
+  region: 'us-east-1',
+  credentials: {
+    accessKeyId: process.env?.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env?.AWS_SECRET_ACCESS_KEY || ''
+  }
+});
+
+const upload = multer({
+  storage: multerS3({
+    s3,
+    bucket: 'demoly-takes',
+    acl: 'public-read',
+    contentType: function (req, file, cb) {
+      cb(null, 'audio/webm;codecs=opus')
+    },
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString())
+    }
+  })
+});
 
 const router = Router();
 
@@ -64,10 +92,24 @@ router.put('/:id/take', verifyToken, upload.single('file'), async (req: RequestW
 
     const { id = '' } = req.params;
     const file = req?.file;
-    if (!file) return res.json({ success: false, message: 'No files were uploaded.' });
-    console.log(file);
+    if (!file) {
+      return res.json({ success: false, message: 'No files were uploaded.' });
+    }
 
-    return res.json({ success: true });
+    const s3FileLocation = file?.location;
+
+    if (!s3FileLocation) {
+      console.log('failed to upload file to s3')
+      return res.status(500).json({ success: false, message: 'Failed to upload take.' })
+    }
+
+    const song = await SongModel.findOneAndUpdate(
+      { _id: id, userID, },
+      { audio: s3FileLocation },
+    )
+    await song.save()
+
+    return res.json({ success: true, items: song });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ success: false, message: 'An unexpected error occurred.' });
