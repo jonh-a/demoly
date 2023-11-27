@@ -94,7 +94,7 @@ const Login: React.FC<Props> = ({ authenticated, setAuthenticated }) => {
         />
 
         <TextField
-          id='password]'
+          id='password'
           label='password'
           type='password'
           setValue={setPassword}
