@@ -1,8 +1,9 @@
-import { useState, SyntheticEvent } from "react";
+import { useState, useEffect, SyntheticEvent } from "react";
 import PageWrapper from "../components/PageWrapper";
 import TextField from "../components/TextField";
 import { IonButton, IonItem, IonRouterLink } from "@ionic/react";
 import ServerClient from "../apis/server";
+import Toast from "../components/Toast";
 import { useIonRouter } from "@ionic/react";
 
 interface Props {
@@ -10,9 +11,9 @@ interface Props {
   setAuthenticated: (authenticated: boolean) => void
 }
 
-interface Toast {
-  message: string;
-  type: string;
+export interface ToastData {
+  type: 'success' | 'warning' | 'error'
+  message: string
 }
 
 const Login: React.FC<Props> = ({
@@ -23,9 +24,16 @@ const Login: React.FC<Props> = ({
   const [password, setPassword] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [toastOpen, setToastOpen] = useState<boolean>(false)
-  // const [toast, setToast] = useState<Toast> = useState({ message: '', type: '' })
+  const [toast, setToast] = useState<ToastData>({ type: 'success', message: '' });
 
   const router = useIonRouter()
+
+  useEffect(() => {
+    if (authenticated) {
+      console.log('redirecting to songs');
+      router.push('/songs')
+    }
+  }, [authenticated]);
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -36,25 +44,22 @@ const Login: React.FC<Props> = ({
       setLoading(false);
 
       if (resp?.status !== 200) {
-        /* setToast({
+        setToast({
           message: resp?.data?.message || 'Failed to sign in.',
           type: 'error'
-        }); */
-        console.log('failed')
+        });
         setToastOpen(true);
-      }
-      else {
-        console.log('success!')
+      } else {
         setAuthenticated(true);
-        router.push('/songs', 'forward', 'push');
+        router.push('/songs', 'root', 'replace');
       }
     } catch (e: any) {
       setLoading(false);
       if (e?.response?.data?.success === false) {
-        /*setToast({
+        setToast({
           message: e?.response?.data?.message || 'Failed to sign in.',
           type: 'error'
-        });*/
+        });
         setToastOpen(true);
       }
     }
@@ -86,6 +91,12 @@ const Login: React.FC<Props> = ({
             Login
           </IonButton>
         </div>
+
+        <Toast
+          toastOpen={toastOpen}
+          toast={toast}
+          setToastOpen={() => setToastOpen(false)}
+        />
       </div>
     </PageWrapper >
   )

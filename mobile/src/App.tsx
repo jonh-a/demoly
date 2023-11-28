@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
+import ServerClient from './apis/server';
 import Menu from './components/Menu';
 import Page from './pages/Page';
 import Login from './pages/Login';
+import Songs from './pages/Songs';
+import Song from './pages/Song';
+import NewSong from './pages/NewSong';
+import Logout from './pages/Logout';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -28,7 +33,21 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+
+  const checkIfAuthenticated = async () => {
+    try {
+      const resp = await ServerClient.get('/user/authenticated', { withCredentials: true });
+      if (resp.status === 200) setAuthenticated(true);
+      else setAuthenticated(false);
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    checkIfAuthenticated();
+  }, []);
 
   return (
     <IonApp>
@@ -40,19 +59,22 @@ const App: React.FC = () => {
               <Redirect to="/Login" />
             </Route>
             <Route path="/login" exact={true}>
-              <Login />
+              <Login setAuthenticated={setAuthenticated} authenticated={authenticated} />
             </Route>
             <Route path="/register" exact={true}>
               <Page name='Register' />
             </Route>
-            <Route path="/songs" exact={true}>
-              <Page name='Songs' />
-            </Route>
             <Route path="/new" exact={true}>
-              <Page name='New Song' />
+              <NewSong setAuthenticated={setAuthenticated} authenticated={authenticated} />
+            </Route>
+            <Route path="/songs" exact={true}>
+              <Songs setAuthenticated={setAuthenticated} authenticated={authenticated} />
+            </Route>
+            <Route path="/song/:id" exact={true}>
+              <Song setAuthenticated={setAuthenticated} authenticated={authenticated} />
             </Route>
             <Route path="/logout" exact={true}>
-              <Page name='Logout' />
+              <Logout setAuthenticated={setAuthenticated} />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>

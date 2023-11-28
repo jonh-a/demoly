@@ -1,5 +1,5 @@
 import React from 'react'
-import { IonList, IonItem, IonInput, IonText } from '@ionic/react'
+import { IonTextarea, IonItem, IonInput, IonText } from '@ionic/react'
 
 interface Props {
   label: string;
@@ -7,37 +7,33 @@ interface Props {
   value: string;
   setValue: (value: string) => void;
   helperText?: string;
-  type: 'text' | 'email' | 'password';
-  required?: boolean;
+  rows: number;
 }
 
-const TextField: React.FC<Props> = ({
+const TextArea: React.FC<Props> = ({
   label,
   placeholder = '',
   value,
   setValue,
   helperText = '',
-  type,
-  required = false
+  rows = 2,
 }) => {
   return (
     <IonItem>
-      <IonInput
+      <IonTextarea
         labelPlacement="floating"
         value={value}
         onInput={(e: any) => { setValue(e.target.value) }}
         placeholder={placeholder}
-        clearInput={true}
         helperText={helperText}
-        type={type}
-        required={required}
+        rows={rows}
       >
         <div slot="label">
           {label}
         </div>
-      </IonInput>
+      </IonTextarea>
     </IonItem>
   )
 }
 
-export default TextField
+export default TextArea

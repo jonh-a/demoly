@@ -3,7 +3,7 @@ import './PageWrapper.css';
 
 interface Props {
   name: string
-  children: JSX.Element
+  children: JSX.Element | JSX.Element[] | null
 }
 
 const PageWrapper: React.FC<Props> = ({ name, children }) => {
