@@ -1,0 +1,23 @@
+ion-toast.custom-toast {
+    --background: #f4f4fa;
+    --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    --color: #000000;
+}
+
+ion-toast.custom-toast::part(button) {
+    border-left: 1px solid #d2d2d2;
+    color: #030207;
+    font-size: 15px;
+}
+
+ion-toast.success-toast {
+    --background: rgb(132, 192, 132);
+}
+
+ion-toast.error-toast {
+    --background: #eb9393;
+}
+
+ion-toast.warning-toast {
+    --background: rgb(255, 255, 184);
+}
